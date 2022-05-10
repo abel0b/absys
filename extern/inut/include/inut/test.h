@@ -3,7 +3,10 @@
 
 #include "inut/test_suite.h"
 
-#define TEST_ROOT "root"
+#define INUT_TEST_ROOT "root"
+#define INUT_TEST_PREFIX "------ "
+#define INUT_TEST_SUFFIX ""
+#define INUT_TEST_SEPARATOR " > "
 
 struct TestSuite * test_suite(struct TestSuite * parent, char * name);
 

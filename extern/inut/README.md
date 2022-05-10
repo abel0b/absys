@@ -4,9 +4,7 @@ unit test framework
 
 ## build
 ```bash
-mkdir build
-cd build
-cmake ..
+premake5 gmake2
 make
 ```
 

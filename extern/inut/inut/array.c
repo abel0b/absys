@@ -1,4 +1,4 @@
-#include "array/array.h"
+#include "inut/array.h"
 #include <stdlib.h>
 
 struct Array *

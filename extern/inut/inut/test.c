@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "array/array.h"
+#include "inut/array.h"
 #include "inut/test.h"
 #include "inut/test_report.h"
 #include <sys/time.h>
@@ -36,7 +36,7 @@ void
 test_init () {
     root = malloc (sizeof (struct TestSuite));
     root->parent = root;
-    root->name = TEST_ROOT;
+    root->name = INUT_TEST_ROOT;
     strcpy(root->complete_name, "\0");
     root->test_suites = array_make();
     root->test_cases = array_make();
@@ -99,10 +99,10 @@ int test_run(int argc, char * argv[]) {
         test_suite_it_next (suite_it)) {
         suite = test_suite_it_get (suite_it);
 
-        if (strcmp(suite->name, TEST_ROOT) != 0) {
-            if (strcmp(suite->parent->name, TEST_ROOT) != 0) {
+        if (strcmp(suite->name, INUT_TEST_ROOT) != 0) {
+            if (strcmp(suite->parent->name, INUT_TEST_ROOT) != 0) {
                 strcat(suite->complete_name, suite->parent->complete_name);
-                strcat(suite->complete_name, TEST_SEPARATOR);
+                strcat(suite->complete_name, INUT_TEST_SEPARATOR);
             }
 
             strcat(suite->complete_name, suite->name);

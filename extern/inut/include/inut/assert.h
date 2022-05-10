@@ -1,44 +1,51 @@
-#ifndef INUT_TEST_ASSERT_H
-#define INUT_TEST_ASSERT_H
+#ifndef INUT_ASSERT_H
+#define INUT_ASSERT_H
 
 #include "inut/test_report.h"
+#include "inut/defs.h"
 #include <stdio.h>
 
-#define MAX_STR 1024
+// TODO: dynamic string size
+#define INUT_MAX_STR 4096
 
-char buffer[MAX_STR];
+#define inut_typecheck(type,var) { typedef void (*type_t)(type); type_t tmp = (type_t)0; if(0) tmp(var);}
+
+extern char inut_buffer[INUT_MAX_STR];
 
 #define assert_zero(a) assert_int_equal(a, 0)
 
+#define assert_sprintf(LAB, FMTA, FMTB, VALA, VALB) sprintf(inut_buffer, INUT_TAB INUT_RED "• Error: Expected %s " FMTA " to equal " FMTB INUT_RESET "\n\n" INUT_TAB INUT_GREEN "+ expected" INUT_RESET " " INUT_RED "- actual" INUT_RESET "\n\n" INUT_TAB INUT_GREEN "+ " FMTA INUT_RESET "\n" INUT_TAB INUT_RED "- " FMTB INUT_RESET "\n\n" INUT_TAB "at %s, line %d", LAB, VALA, VALB, VALA, VALB, __FILE__, __LINE__)
+
 #define assert_int_equal(a, b) if(a!=b) {\
-    sprintf(buffer, TAB RED "• Error: Expected integer '%d' to equal '%d'" RESET "\n\n" TAB GREEN "+ expected" RESET " " RED "- actual" RESET "\n\n" TAB GREEN "+ %d" RESET "\n" TAB RED "- %d" RESET "\n\n" TAB "at %s, line %d", a, b, a, b, __FILE__, __LINE__);\
-    return fail(buffer);\
+    inut_typecheck(int, a);\
+    inut_typecheck(int, b);\
+    assert_sprintf("integer", "%d", "%d", (int)a, (int)b);\
+    return fail(inut_buffer);\
 }
 
-#define assert_ptr_equal(a, b) if(a!=b) {\
-    char ptr1[64];\
-    char ptr2[64];\
-    if (a == NULL) {\
-        sprintf(ptr1, "NULL");\
+#define assert_uint_equal(a, b) if(a!=b) {\
+    inut_typecheck(unsigned int, a);\
+    inut_typecheck(unsigned int, b);\
+    assert_sprintf("unsigned integer", "%u", "%u", (unsigned int)a, (unsigned int)b);\
+    return fail(inut_buffer);\
+}
+
+#define assert_ptr_equal(a, b) if(a != b) {\
+    if (!a) {\
+    	assert_sprintf("pointer", "%s", "%p", "NULL", b);\
     }\
     else {\
-        sprintf(ptr1, "%p", a);\
+    	assert_sprintf("pointer", "%p", "%s", a, "NULL");\
     }\
-    if (b == NULL) {\
-        sprintf(ptr2, "NULL");\
-    }\
-    else {\
-        sprintf(ptr2, "%p", b);\
-    }\
-    sprintf(buffer, TAB RED "• Error: Expected pointer '%s' to equal '%s'" RESET "\n\n" TAB GREEN "+ expected" RESET " " RED "- actual" RESET "\n\n" TAB GREEN "+ %s" RESET "\n" TAB RED "- %s" RESET "\n\n" TAB "at %s, line %d", ptr1, ptr2, ptr1, ptr2, __FILE__, __LINE__);\
-    return fail(buffer);\
+    return fail(inut_buffer);\
 }
 
 #define assert(a) assert_boolean(a)
 
 #define assert_boolean(a) if(!a) {\
-    sprintf(buffer, TAB RED "• Error: Expected 'false' to be 'true'" RESET "\n\n" TAB GREEN "+ expected" RESET " " RED "- actual" RESET "\n\n" TAB GREEN "+ true" RESET "\n" TAB RED "- false" RESET "\n\n" TAB "at %s, line %d", __FILE__, __LINE__);\
-    return fail(buffer);\
+    assert_sprintf("boolean", "%s", "%s", "false", "true");\
+    return fail(inut_buffer);\
 }
 
 #endif
+

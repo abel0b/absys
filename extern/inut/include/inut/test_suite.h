@@ -1,7 +1,7 @@
 #ifndef INUT_TEST_SUITE_H
 #define INUT_TEST_SUITE_H
 
-#include "array/array.h"
+#include "inut/array.h"
 
 struct TestSuite {
     struct TestSuite * parent;

@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "inut/test_suite.h"
-#include "array/array.h"
+#include "inut/array.h"
 
 struct TestSuite *
 test_suite_resolve(struct TestSuite * suite, char * name) {

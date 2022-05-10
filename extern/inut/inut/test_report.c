@@ -1,7 +1,21 @@
 #include <stdlib.h>
+#include "inut/test.h"
 #include "inut/test_report.h"
-#include "array/hash_table.h"
+#include "inut/hash_table.h"
 #include <stdio.h>
+
+#define BOLD "\033[1m"
+#define GREEN "\033[32m"
+#define BLUE "\033[34m"
+#define RED "\033[31m"
+#define YELLOW "\033[33m"
+#define WHITE_FG_GREEN "\033[1;39;42m"
+#define WHITE_FG_RED "\033[1;39;41m"
+#define WHITE_FG_BLUE "\033[1;39;44m"
+#define WHITE_FG_YELLOW "\033[1;39;43m"
+#define RESET "\033[0m"
+#define UNDERLINE "\033[4m"
+#define TAB "       "
 
 int number_total = 0;
 int number_passed = 0;
@@ -11,7 +25,7 @@ int number_todo = 0;
 
 void
 test_report_suite(char * complete_name) {
-    printf (BOLD TEST_PREFIX "%s\n" RESET, complete_name);
+    printf (BOLD INUT_TEST_PREFIX "%s\n" RESET, complete_name);
 }
 
 void
