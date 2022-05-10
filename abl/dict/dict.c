@@ -7,7 +7,7 @@
 static int NUMBUCKETS = 8;
 static int INITBUCKETCAPACITY = 8;
 
-void abl_dict_new(struct abl_dict* dict) {
+ABL_API void abl_dict_new(struct abl_dict* dict) {
     dict->numbuckets = NUMBUCKETS;
     dict->sizes = abl_malloc(sizeof(dict->sizes[0]) * dict->numbuckets);
     memset(dict->sizes, 0, sizeof(dict->sizes[0]) * dict->numbuckets);
@@ -27,7 +27,7 @@ static unsigned long hash(char *str) {
     return hash;
 }
 
-void abl_dict_set(struct abl_dict* dict, char* key, void* value) {
+ABL_API void abl_dict_set(struct abl_dict* dict, char* key, void* value) {
     unsigned long bucketid = hash(key) % dict->numbuckets;
     if (!dict->buckets) {
         dict->buckets = abl_malloc(sizeof(dict->buckets[0]) * dict->numbuckets);
@@ -46,7 +46,7 @@ void abl_dict_set(struct abl_dict* dict, char* key, void* value) {
     ++ dict->sizes[bucketid];
 }
 
-void* abl_dict_get(struct abl_dict* dict, char* key) {
+ABL_API void* abl_dict_get(struct abl_dict* dict, char* key) {
     unsigned long bucketid = hash(key) % dict->numbuckets;
     for(int i = 0; i < dict->sizes[bucketid]; ++ i) {
         if (strcmp(key, dict->buckets[bucketid][i].key) == 0) {
@@ -56,7 +56,7 @@ void* abl_dict_get(struct abl_dict* dict, char* key) {
     return NULL;
 }
 
-void abl_dict_del(struct abl_dict* dict) {
+ABL_API void abl_dict_del(struct abl_dict* dict) {
     for(int i = 0; i < dict->numbuckets; ++ i) {
         if (dict->capacities[i]) {
             abl_free(dict->buckets[i]);
@@ -68,7 +68,7 @@ void abl_dict_del(struct abl_dict* dict) {
     abl_free(dict->capacities);
 }
 
-void abl_dict_display(struct abl_dict* dict) {
+ABL_API void abl_dict_display(struct abl_dict* dict) {
     for(int i = 0; i < dict->numbuckets; ++ i) {
         if (dict->sizes[i]) {
             for(int j = 0; j < dict->sizes[i]; ++ j) {

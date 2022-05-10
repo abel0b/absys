@@ -2,17 +2,10 @@
 #define ABLTIME__H
 
 #include <stdint.h>
+#include "abl/defs.h"
 
 #if UNIX
 #include <sys/time.h>
-#endif
-
-#if WINDOWS
-#include <windows.h>
-
-struct timezone;
-
-int gettimeofday(struct timeval* tp, struct timezone* tzp);
 #endif
 
 struct abl_timer {
@@ -20,10 +13,10 @@ struct abl_timer {
     struct timeval end;
 };
 
-void abl_timer_start(struct abl_timer* timer);
-int abl_timer_end(struct abl_timer* timer);
+ABL_API void abl_timer_start(struct abl_timer* timer);
+ABL_API int abl_timer_end(struct abl_timer* timer);
 
-int abl_time_get();
-uint64_t abl_time_get_us();
+ABL_API int abl_time_get();
+ABL_API uint64_t abl_time_get_us();
 
 #endif

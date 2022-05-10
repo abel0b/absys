@@ -27,12 +27,12 @@ static size_t checklimit(size_t newmem) {
 }
 
 #if DEBUG
-void* abl_malloc_aux(size_t size, const char* file, int line, const char* func) {
+ABL_API void* abl_malloc_aux(size_t size, const char* file, int line, const char* func) {
     if (getenv("DEBUG_MEMORY")) {
         abl_ilog("mem.malloc: %zuB at %s:%d:%s", size, file, line, func);
     } 
 #else
-void* abl_malloc_aux(size_t size) {
+ABL_API void* abl_malloc_aux(size_t size) {
 #endif
     mem = checklimit(mem+size);
     mempeak = size_max(mempeak, mem);
@@ -42,13 +42,13 @@ void* abl_malloc_aux(size_t size) {
 }
 
 #if DEBUG
-void* abl_realloc_aux(void * ptr, size_t newsize, const char* file, int line, const char* func) {
+ABL_API void* abl_realloc_aux(void * ptr, size_t newsize, const char* file, int line, const char* func) {
     if (getenv("DEBUG_MEMORY")) {
         abl_ilog("mem.realloc: %p %zuB at %s:%d:%s", ptr, newsize, file, line, func);
     }
 
 #else
-void* abl_realloc_aux(void * ptr, size_t newsize) {
+ABL_API void* abl_realloc_aux(void * ptr, size_t newsize) {
 #endif
     void* data = realloc(ptr, newsize);
     checkptr(data, newsize);
@@ -56,12 +56,12 @@ void* abl_realloc_aux(void * ptr, size_t newsize) {
 }
 
 #if DEBUG
-void abl_free_aux(void * ptr, const char* file, int line, const char* func) {
+ABL_API void abl_free_aux(void * ptr, const char* file, int line, const char* func) {
     if (getenv("DEBUG_MEMORY")) {
         abl_ilog("mem.free: %p at %s:%d:%s", ptr, file, line, func);
     }
 #else
-void abl_free_aux(void * ptr) {
+ABL_API void abl_free_aux(void * ptr) {
 #endif
     free(ptr);
 }

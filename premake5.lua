@@ -9,6 +9,7 @@ workspace "abl"
 
     filter { "configurations:release", "toolset:clang or gcc" }
         buildoptions { "-Wall -Wextra" }
+	visibility "Hidden"
 
     filter { "configurations:debug", "toolset:clang or gcc" }
         buildoptions { "-std=c99", "-pedantic" }
@@ -29,11 +30,23 @@ workspace "abl"
         defines { "DEBUG=0" }
         optimize "On"
 
+    include "extern/inut"
+
     project "abl"
-        kind "StaticLib"
+        kind "SharedLib"
         language "C"
         includedirs { "include" }
+	defines { "ABL_DLL", "ABL_DLL_EXPORTS" }
         files { "include/**.h", "abl/**.h", "abl/**.c" }
+
+    project "test"
+        kind "ConsoleApp"
+	optimize "Debug"
+        language "C"
+        includedirs { "include", "extern/inut/include" }
+	links { "abl", "inut" }
+        files { "include/**.h", "test/**.c" }
+
 
 newoption {
     trigger = "prefix",
@@ -71,3 +84,4 @@ newaction {
         flags:close()
     end
 }
+

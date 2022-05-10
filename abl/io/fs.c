@@ -9,7 +9,7 @@
 #include <unistd.h>
 #endif
 
-void ensuredir(char* path) {
+ABL_API void abl_fs_mkdirp(char* path) {
     struct stat st;
     if (stat(path, &st) == -1) {
 #if WINDOWS
@@ -31,15 +31,7 @@ void ensuredir(char* path) {
     }
 }
 
-int isds(char c) {
-#if WINDOWS
-    return (c == '/') || (c == '\\');
-#else
-    return c == '/';
-#endif
-}
-
-void read_to_str(char* path, struct abl_str* dest) {
+ABL_API void abl_fs_read2str(char* path, struct abl_str* dest) {
     FILE * file = fopen(path, "rb");
     if (file == NULL) {
         perror("fopen");
@@ -55,8 +47,7 @@ void read_to_str(char* path, struct abl_str* dest) {
 
     if (filesize) {
         abl_str_resize(dest, filesize);
-        size_t r = fread(dest->data, filesize, 1, file);
-        assert(r == 1);
+        fread(dest->data, filesize, 1, file);
     }
    
     fclose(file);

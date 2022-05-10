@@ -2,11 +2,10 @@
 #define ABLFS__H
 
 #include "abl/str.h"
+#include "abl/defs.h"
 
-void ensuredir(char* path);
+ABL_API void abl_fs_mkdirp(char* path);
 
-int isds(char c);
-
-void read_to_str(char* path, struct abl_str* dest);
+ABL_API void abl_fs_read2str(char* path, struct abl_str* dest);
 
 #endif

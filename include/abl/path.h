@@ -3,12 +3,14 @@
 
 #include "abl/str.h"
 
-void abl_path_push(struct abl_str* path, char* subpath);
+ABL_API void abl_path_push(struct abl_str* path, char* subpath);
 
-void abl_path_pushf(struct abl_str* path, char* fmt, ...);
+ABL_API void abl_path_pushf(struct abl_str* path, char* fmt, ...);
 
-void abl_path_normalize(struct abl_str* path);
+ABL_API void abl_path_normalize(struct abl_str* path);
 
-char* abl_path_basename(struct abl_str* path);
+ABL_API char* abl_path_basename(struct abl_str* path);
+
+ABL_API int abl_path_isds(char c);
 
 #endif

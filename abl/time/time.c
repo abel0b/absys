@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 #if WINDOWS
+#include <windows.h>
 // credit: https://stackoverflow.com/a/26085827
 int gettimeofday(struct timeval * tp, struct timezone * tzp) {
     // Note: some broken versions only have 8 trailing zero's, the correct epoch has 9 trailing zero's
@@ -25,19 +26,19 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp) {
 }
 #endif
 
-void abl_timer_start(struct abl_timer* timer) {
+ABL_API void abl_timer_start(struct abl_timer* timer) {
     int rc = gettimeofday(&timer->start, NULL);
     if (rc != 0) exit(1);
 }
 
-int abl_timer_end(struct abl_timer* timer) { 
+ABL_API int abl_timer_end(struct abl_timer* timer) { 
     int rc = gettimeofday(&timer->end, NULL);
     if (rc != 0) exit(1);
     int time_us = (timer->end.tv_sec - timer->start.tv_sec) * 1000000 + (timer->end.tv_usec - timer->start.tv_usec);
     return time_us;
 }
 
-int abl_time_get() {
+ABL_API int abl_time_get() {
     struct timeval tv;
     int rc = gettimeofday(&tv, NULL);
     if (rc != 0) {
@@ -47,7 +48,7 @@ int abl_time_get() {
     return tv.tv_sec;
 }
 
-uint64_t abl_time_get_us() {
+ABL_API uint64_t abl_time_get_us() {
     struct timeval tv;
     int rc = gettimeofday(&tv, NULL);
     if (rc != 0) {

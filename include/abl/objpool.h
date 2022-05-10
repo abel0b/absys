@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include "abl/vec.h"
+#include "abl/defs.h"
 
 struct abl_objpool_chunk {
     char* data;
@@ -18,10 +19,10 @@ struct abl_objpool {
     void (*del)(void*);
 };
 
-void abl_objpool_new(struct abl_objpool* objpool, size_t elem_size, void del(void*));
-void abl_objpool_del(struct abl_objpool* objpool);
-void* abl_objpool_alloc(struct abl_objpool* objpool);
-void* abl_objpool_arralloc(struct abl_objpool* objpool, int n);
-void abl_objpool_pop(struct abl_objpool* objpool, int size);
+ABL_API void abl_objpool_new(struct abl_objpool* objpool, size_t elem_size, void del(void*));
+ABL_API void abl_objpool_del(struct abl_objpool* objpool);
+ABL_API void* abl_objpool_alloc(struct abl_objpool* objpool);
+ABL_API void* abl_objpool_arralloc(struct abl_objpool* objpool, int n);
+ABL_API void abl_objpool_pop(struct abl_objpool* objpool, int size);
 
 #endif

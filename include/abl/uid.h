@@ -2,13 +2,15 @@
 #define ABLUID__H
 
 #include <stdint.h>
+#include "abl/defs.h"
 
-void seed(uint64_t s);
+enum abl_uid_kind {
+    ABL_UID_LALPHANUM = 0,
+    ABL_UID_UALPHANUM = 1,
+};
 
-uint64_t genuint64();
+ABL_API void abl_uid_seed(uint64_t s);
 
-void genuid(char uid[8]);
-
-void genuidmaj(char uid[8]);
+ABL_API void abl_uid_gen(char uid[8], enum abl_uid_kind kind);
 
 #endif

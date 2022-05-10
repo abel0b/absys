@@ -19,7 +19,7 @@ static void abl_objpool_chunk_del(struct abl_objpool_chunk* chunk, size_t elem_s
     abl_free(chunk->data);
 }
 
-void abl_objpool_new(struct abl_objpool* objpool, size_t elem_size, void del(void*)) {
+ABL_API void abl_objpool_new(struct abl_objpool* objpool, size_t elem_size, void del(void*)) {
     assert(elem_size < CHUNK_SIZE);
     objpool->cap_chunks = 1;
     objpool->num_chunks = 1;
@@ -29,7 +29,7 @@ void abl_objpool_new(struct abl_objpool* objpool, size_t elem_size, void del(voi
     objpool->del = del;
 }
 
-void abl_objpool_del(struct abl_objpool* objpool) {
+ABL_API void abl_objpool_del(struct abl_objpool* objpool) {
     if (objpool->cap_chunks) {
         for(int i = 0; i < objpool->num_chunks; ++i) {
             abl_objpool_chunk_del(&objpool->chunks[i], objpool->elem_size, objpool->del);
@@ -38,7 +38,7 @@ void abl_objpool_del(struct abl_objpool* objpool) {
     }
 }
 
-void* abl_objpool_alloc(struct abl_objpool* objpool) {
+ABL_API void* abl_objpool_alloc(struct abl_objpool* objpool) {
     int chunk = objpool->num_chunks - 1;
     if (objpool->elem_size > CHUNK_SIZE - objpool->chunks[chunk].cursor) {
         if (objpool->cap_chunks == objpool->num_chunks) {
@@ -55,7 +55,7 @@ void* abl_objpool_alloc(struct abl_objpool* objpool) {
     return obj;
 }
 
-void* abl_objpool_arralloc(struct abl_objpool* objpool, int count) {
+ABL_API void* abl_objpool_arralloc(struct abl_objpool* objpool, int count) {
     assert(count * objpool->elem_size < CHUNK_SIZE);
     int chunk = objpool->num_chunks - 1;
     if (objpool->elem_size * count > CHUNK_SIZE - objpool->chunks[chunk].cursor) {
@@ -73,7 +73,7 @@ void* abl_objpool_arralloc(struct abl_objpool* objpool, int count) {
     return obj;
 }
 
-void abl_objpool_pop(struct abl_objpool* objpool, int count) {
+ABL_API void abl_objpool_pop(struct abl_objpool* objpool, int count) {
     int chunk = objpool->num_chunks - 1;
     assert((size_t)objpool->chunks[chunk].cursor >= count* objpool->elem_size);
     objpool->chunks[chunk].cursor -= count * objpool->elem_size;

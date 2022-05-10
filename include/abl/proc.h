@@ -2,7 +2,8 @@
 #define ABLPROC__H
 
 #include <stdio.h>
+#include "abl/defs.h"
 
-int abl_spawn(char* prog, char* argv[], FILE* stdoutlog);
+ABL_API int abl_spawn(char* prog, char* argv[], FILE* stdoutlog);
 
 #endif

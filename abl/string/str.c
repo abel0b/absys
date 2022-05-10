@@ -8,14 +8,14 @@
 
 abl_vec_impl(struct abl_str, str)
 
-void abl_str_new(struct abl_str* str) {
+ABL_API void abl_str_new(struct abl_str* str) {
     str->len = 0;
     str->cap = 8;
     str->data = abl_malloc(sizeof(str->data[0]) * str->cap);
     str->data[0] = '\0';
 }
 
-void abl_str_catf(struct abl_str* str, char* fmt, ...) {
+ABL_API void abl_str_catf(struct abl_str* str, char* fmt, ...) {
     va_list args;
     va_start(args, fmt);
     int len = vsnprintf(NULL, 0, fmt, args);
@@ -32,7 +32,7 @@ void abl_str_catf(struct abl_str* str, char* fmt, ...) {
     str->len += len;
 }
 
-void abl_str_cat(struct abl_str* str, char* src) {
+ABL_API void abl_str_cat(struct abl_str* str, char* src) {
     int len = strlen(src);
     while(str->cap < str->len + len + 1) {
         str->cap = (str->cap)? 2 * str->cap : 8;
@@ -42,7 +42,7 @@ void abl_str_cat(struct abl_str* str, char* src) {
     str->len += len;
 }
 
-void abl_str_resize(struct abl_str* str, long int len) {
+ABL_API void abl_str_resize(struct abl_str* str, long int len) {
     if (len + 1 > str->cap) {
         str->cap = len + 1;
         str->data = abl_realloc(str->data, sizeof(str->data[0]) * str->cap);
@@ -51,7 +51,7 @@ void abl_str_resize(struct abl_str* str, long int len) {
     str->data[str->len] = '\0';
 }
 
-void abl_str_del(struct abl_str* str) {
+ABL_API void abl_str_del(struct abl_str* str) {
     if (str->data) {
         abl_free(str->data);
     }

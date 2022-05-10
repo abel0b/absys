@@ -2,6 +2,7 @@
 #define ABLDICT__H
 
 #include "abl/strstack.h"
+#include "abl/defs.h"
 #include <stdint.h>
 
 struct abl_dictentry {
@@ -17,10 +18,10 @@ struct abl_dict {
     int* capacities;
 };
 
-void abl_dict_new(struct abl_dict* dict);
-void abl_dict_set(struct abl_dict* dict, char* key, void* value);
-void* abl_dict_get(struct abl_dict* dict, char* key);
-void abl_dict_display(struct abl_dict* dict);
-void abl_dict_del(struct abl_dict* dict);
+ABL_API void abl_dict_new(struct abl_dict* dict);
+ABL_API void abl_dict_set(struct abl_dict* dict, char* key, void* value);
+ABL_API void* abl_dict_get(struct abl_dict* dict, char* key);
+ABL_API void abl_dict_display(struct abl_dict* dict);
+ABL_API void abl_dict_del(struct abl_dict* dict);
 
 #endif

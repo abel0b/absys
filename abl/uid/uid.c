@@ -1,14 +1,16 @@
 #include "abl/uid.h"
 #include "abl/time.h"
+#include "abl/log.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 static uint64_t state = 1;
 
-void seed(uint64_t s) {
+ABL_API void abl_uid_seed(uint64_t s) {
     state = s;
 }
  
-uint64_t genuint64() {
+ABL_INTERNAL uint64_t genuint64() {
     uint64_t x = state;
     x ^= x << 13;
     x ^= x >> 7;
@@ -24,10 +26,17 @@ static void genuid_aux(char uid[8], char alphabet[16]) {
     }
 }
 
-void genuid(char uid[8]) {
-    genuid_aux(uid, "0123456789abcdef");
-}
-
-void genuidmaj(char uid[8]) {
-    genuid_aux(uid, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+ABL_API void abl_uid_gen(char uid[8], enum abl_uid_kind kind) {
+    switch(kind) {
+	case ABL_UID_LALPHANUM:
+            genuid_aux(uid, "0123456789abcdef");
+	    break;
+	case ABL_UID_UALPHANUM:
+    	    genuid_aux(uid, "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
+	    break;
+	default:
+	    abl_elog("invalid kind %d for abl uid", kind);
+	    exit(1);
+	    break;
+    }
 }

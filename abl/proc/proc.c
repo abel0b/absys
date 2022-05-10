@@ -14,7 +14,7 @@
 #include <unistd.h>
 #endif
 
-int abl_spawn(char* prog, char* args[], FILE* logfile) {
+ABL_API int abl_spawn(char* prog, char* args[], FILE* logfile) {
     char** argv = NULL;
     {
         int numarg = 0;
