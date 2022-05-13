@@ -85,3 +85,11 @@ newaction {
     end
 }
 
+newaction {
+    trigger = "test",
+    description = "Run test suite",
+    execute = function ()
+	os.execute("bin/debug/test")
+    end
+}
+
