@@ -1,3 +1,3 @@
 #include "inut/assert.h"
 
-char inut_buffer[INUT_MAX_STR];
+char _inut_buffer[INUT_MAX_STR];
