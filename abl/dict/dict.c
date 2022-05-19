@@ -40,6 +40,13 @@ ABL_API void abl_dict_set(struct abl_dict* dict, char* key, void* value) {
         dict->capacities[bucketid] *= 2;
         dict->buckets[bucketid] = abl_realloc(dict->buckets[bucketid], sizeof(dict->buckets[0][0]) * dict->capacities[bucketid]);
     }
+
+    for(int i = 0; i < dict->sizes[bucketid]; ++i) {
+        if(strcmp(dict->buckets[bucketid][i].key, key) == 0) { 
+    	    dict->buckets[bucketid][i].value = value;
+	    return;
+	}
+    }
     
     dict->buckets[bucketid][dict->sizes[bucketid]].key = abl_str_stack_push(&dict->key_pool, key);
     dict->buckets[bucketid][dict->sizes[bucketid]].value = value;
