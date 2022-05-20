@@ -5,6 +5,7 @@
 #include "inut/test.h"
 #include "inut/test_report.h"
 
+#include <getopt.h>
 #if WINDOWS
 #include <windows.h>
 // credit: https://stackoverflow.com/a/26085827
@@ -27,9 +28,7 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp) {
     tp->tv_usec = (long) (system_time.wMilliseconds * 1000);
     return 0;
 }
-#include <getopt.c>
 #else
-#include <getopt.h>
 #include <sys/time.h>
 #endif
 
