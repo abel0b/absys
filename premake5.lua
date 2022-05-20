@@ -44,7 +44,8 @@ workspace "abl"
 	optimize "Debug"
         language "C"
         includedirs { "include", "extern/inut/include" }
-	links { "abl", "inut" }
+	links { "abl" }
+	libinut {}
         files { "include/**.h", "test/**.c" }
 
 
