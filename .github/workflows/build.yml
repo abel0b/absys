@@ -49,7 +49,7 @@ jobs:
         run: premake5 gmake2
       
       - name: Compile
-        run: make -j$(nproc) CC=${{ matrix.cc }} config=$CONFIG
+        run: make CC=${{ matrix.cc }} config=$CONFIG
 
   build-windows:
     runs-on: windows-latest
