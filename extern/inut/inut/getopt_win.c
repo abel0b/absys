@@ -56,6 +56,10 @@
 #include <stdio.h>
 
 #if WINDOWS
+#define REPLACE_GETOPT 1
+#endif
+
+#ifdef REPLACE_GETOPT
 #include <windows.h>
 
 int	opterr = 1;		/* if error message should be printed */
