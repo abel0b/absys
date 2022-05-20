@@ -105,13 +105,18 @@ int test_run(int argc, char * argv[]) {
     int opt;
     int seed_arg = 0;
 
-    while((opt = getopt(argc, argv, "s:")) != -1) {
-        switch (opt) {
-            case 's':
-                seed_arg = 1;
-                seed = atol(optarg);
-                break;
-        }
+    int i = 1;
+    while(i<argc) {
+        if (strcmp(argv[i], "-s") == 0) {
+	    ++i;
+	    seed_arg = 1;
+            seed = atol(argv[i]);
+	}
+	else {
+	    fprintf(stderr, "error: unknown option '%s'\n", argv[i]);
+	    exit(1);
+	}
+	++i;
     }
 
     if (!seed_arg) {
