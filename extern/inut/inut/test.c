@@ -5,7 +5,6 @@
 #include "inut/test.h"
 #include "inut/test_report.h"
 
-#include <getopt.h>
 #if WINDOWS
 #include <windows.h>
 // credit: https://stackoverflow.com/a/26085827
