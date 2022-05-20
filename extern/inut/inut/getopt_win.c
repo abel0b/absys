@@ -55,6 +55,8 @@
 #include <stdarg.h>
 #include <stdio.h>
 
+#include "getopt_win.h"
+
 #if WINDOWS
 #define REPLACE_GETOPT 1
 #endif
