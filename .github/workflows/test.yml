@@ -49,7 +49,7 @@ jobs:
         run: premake5 gmake2
       
       - name: Compile
-        run: make CC=${{ matrix.cc }} config=$CONFIG
+        run: make CC=${{ matrix.cc }} config=$CONFIG verbose=1
 
       - name: Run test suite
         run: premake5 test
