@@ -5,6 +5,9 @@
 #include "inut/array.h"
 #include "inut/test.h"
 #include "inut/test_report.h"
+#include "inut/assert.h"
+
+char _inut_buffer[INUT_MAX_STR];
 
 #if WINDOWS
 #include <windows.h>
