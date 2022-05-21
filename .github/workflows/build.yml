@@ -19,7 +19,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-10.15]
+        os: [ubuntu-20.04, macos-12]
         cc: [clang]
         include:
           - os: ubuntu-20.04
@@ -52,7 +52,7 @@ jobs:
         run: make CC=${{ matrix.cc }} config=$CONFIG verbose=1
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     strategy:
       matrix:

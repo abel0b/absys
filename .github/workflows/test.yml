@@ -24,7 +24,7 @@ jobs:
         include:
           - os: ubuntu-20.04
             osname: linux
-          - os: macos-10.15
+          - os: macos-12
             osname: macos
 
     steps:
@@ -55,7 +55,7 @@ jobs:
         run: premake5 test
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     strategy:
       matrix:
