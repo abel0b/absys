@@ -36,7 +36,7 @@ workspace "abl"
         kind "SharedLib"
         language "C"
         includedirs { "include" }
-	defines { "ABL_DLL", "ABL_DLL_EXPORTS" }
+	--defines { "ABL_DLL", "ABL_DLL_EXPORTS" }
         files { "include/**.h", "abl/**.h", "abl/**.c" }
 
 
@@ -45,7 +45,7 @@ workspace "abl"
 	optimize "Debug"
         language "C"
         includedirs { "include", "extern/inut/include" }
-	defines { "ABL_DLL" }
+	--defines { "ABL_DLL" }
 	links { "abl" }
 	libinut {}
         files { "include/**.h", "test/**.c" }
