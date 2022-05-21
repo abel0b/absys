@@ -8,15 +8,9 @@
   #define ABL_HELPER_DLL_EXPORT __declspec(dllexport)
   #define ABL_HELPER_DLL_INTERNAL
 #else
-  #if __GNUC__ >= 4
-    #define ABL_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
-    #define ABL_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
-    #define ABL_HELPER_DLL_INTERNAL  __attribute__ ((visibility ("hidden")))
-  #else
-    #define ABL_HELPER_DLL_IMPORT
-    #define ABL_HELPER_DLL_EXPORT
-    #define ABL_HELPER_DLL_INTERNAL
-  #endif
+  #define ABL_HELPER_DLL_IMPORT __attribute__ ((visibility ("default")))
+  #define ABL_HELPER_DLL_EXPORT __attribute__ ((visibility ("default")))
+  #define ABL_HELPER_DLL_INTERNAL __attribute__ ((visibility ("hidden")))
 #endif
 
 #ifdef ABL_DLL
