@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdint.h>
 #include "inut/array.h"
 #include "inut/test.h"
 #include "inut/test_report.h"
