@@ -11,7 +11,7 @@ workspace "abl"
 
     filter { "configurations:release", "toolset:clang or gcc" }
         buildoptions { "-Wall -Wextra" }
-	--visibility "Hidden"
+	visibility "Hidden"
 
     filter { "configurations:debug", "toolset:clang or gcc" }
         buildoptions { "-std=c99", "-pedantic" }
@@ -33,7 +33,7 @@ workspace "abl"
         optimize "On"
 
     project "abl"
-        kind "SharedLib"
+        kind "StaticLib"
         language "C"
         includedirs { "include" }
 	defines { "ABL_DLL", "ABL_DLL_EXPORTS" }
