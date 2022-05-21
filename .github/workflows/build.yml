@@ -19,12 +19,12 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-20.04, macos-10.15]
+        os: [ubuntu-20.04, macos-12]
         cc: [clang]
         include:
           - os: ubuntu-20.04
             osname: linux
-          - os: macos-10.15
+          - os: macos-12
             osname: macos
 
     steps:
@@ -49,10 +49,10 @@ jobs:
         run: premake5 gmake2
       
       - name: Compile
-        run: make -j$(nproc) CC=${{ matrix.cc }} config=$CONFIG
+        run: make CC=${{ matrix.cc }} config=$CONFIG verbose=1
 
   build-windows:
-    runs-on: windows-latest
+    runs-on: windows-2022
 
     strategy:
       matrix:

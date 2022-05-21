@@ -6,6 +6,8 @@
 
 #if UNIX
 #include <sys/time.h>
+#else
+#include <windows.h>
 #endif
 
 struct abl_timer {

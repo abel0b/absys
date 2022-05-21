@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:abel0b/inut.git
 	branch = master
-	commit = 4bbca15e5061e0e9f1b5e9ee0ee3208fb1b076be
-	parent = 3fa18a083cc3a5db31d85b690a0d3b058a5ba2a8
+	commit = a5db3cb8a2e6a0d135a72e790082d76ff39d0590
+	parent = 8af20476de848c831b099f1114049acac69928d0
 	method = merge
 	cmdver = 0.4.3

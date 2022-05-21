@@ -1,11 +1,13 @@
 workspace "abl"
     configurations { "debug", "release", "debug-vg" }
-    
+
     if os.host() == "windows" then
         defines { "WINDOWS=1", "_CRT_SECURE_NO_WARNINGS", "_CRT_NONSTDC_NO_WARNINGS" }
     else
         defines { "UNIX=1", "_POSIX_C_SOURCE=200809L" }
     end
+
+    include "extern/inut/inut.lua"
 
     filter { "configurations:release", "toolset:clang or gcc" }
         buildoptions { "-Wall -Wextra" }
@@ -30,8 +32,6 @@ workspace "abl"
         defines { "DEBUG=0" }
         optimize "On"
 
-    include "extern/inut"
-
     project "abl"
         kind "SharedLib"
         language "C"
@@ -44,7 +44,9 @@ workspace "abl"
 	optimize "Debug"
         language "C"
         includedirs { "include", "extern/inut/include" }
-	links { "abl", "inut" }
+	defines { "ABL_DLL" }
+	links { "abl" }
+	libinut {}
         files { "include/**.h", "test/**.c" }
 
 
