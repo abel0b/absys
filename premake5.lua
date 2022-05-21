@@ -33,7 +33,7 @@ workspace "abl"
         optimize "On"
 
     project "abl"
-        kind "StaticLib"
+        kind "SharedLib"
         language "C"
         includedirs { "include" }
 	defines { "ABL_DLL", "ABL_DLL_EXPORTS" }
@@ -45,6 +45,7 @@ workspace "abl"
 	optimize "Debug"
         language "C"
         includedirs { "include", "extern/inut/include" }
+	defines { "ABL_DLL" }
 	links { "abl" }
 	libinut {}
         files { "include/**.h", "test/**.c" }
