@@ -85,7 +85,7 @@ jobs:
 
       - name: Compile
         run: |
-          .\dev\vsenv.ps1
+          .\tools\vsenv.ps1
           msbuild abl.sln -m -p:CLToolExe=${{ matrix.cc }} -p:Configuration=$env:CONFIG
 
       - name: Run test suite
