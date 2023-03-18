@@ -86,7 +86,7 @@ jobs:
       - name: Compile
         run: |
           .\tools\vsenv.ps1
-          msbuild abl.sln -m -p:CLToolExe=${{ matrix.cc }} -p:Configuration=$env:CONFIG
+          msbuild absys.sln -m -p:CLToolExe=${{ matrix.cc }} -p:Configuration=$env:CONFIG
 
       - name: Run test suite
         run: premake5 test 
