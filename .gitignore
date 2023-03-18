@@ -1,0 +1,10 @@
+/bin
+/obj
+/tmp
+*.make
+Makefile
+*.sln
+*.vcxproj*
+compile_flags.txt
+/next
+/dist
