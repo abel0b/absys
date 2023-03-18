@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/git-commands/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:ianlancetaylor/libbacktrace.git
+	branch = master
+	commit = ad106d5fdd5d960bd33fae1c48a351af567fd075
+	parent = 8c442587e1d1000e0a31e5a92cbae7f484fcf466
+	method = merge
+	cmdver = 0.4.3
