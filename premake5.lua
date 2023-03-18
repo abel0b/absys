@@ -8,45 +8,45 @@ workspace "absys"
     end
 
     filter "configurations:debug or debug-vg"
- 	defines { "DEBUG=1" }
+ 	    defines { "DEBUG=1" }
+        symbols "On"
 
     filter "configurations:release"
- 	defines { "DEBUG=0" }
-	optimize "On"
+ 	    defines { "DEBUG=0" }
+	    optimize "On"
 
     filter { "configurations:release", "toolset:clang or gcc" }
- 	buildoptions { "-Wall -Wextra" }
-	visibility "Hidden"
+ 	    buildoptions { "-Wall -Wextra" }
+	    visibility "Hidden"
 
     filter { "configurations:debug", "toolset:clang or gcc" }
- 	buildoptions { "-pedantic" }
+ 	    buildoptions { "-pedantic" }
 
     filter "configurations:debug"
-	optimize "Debug"
+	    optimize "Debug"
 
     if os.host() == "linux" then
- 	filter { "configurations:debug", "toolset:clang" }
-        buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
-	--linkoptions { "-fsanitize=address,leak,undefined", "-Wl,--export-dynamic" }
-	defines { "DEBUG_SAN=1" }
-	filter { "configurations:debug or debug-vg", "toolset:clang or gcc" }
-	buildoptions { "-ggdb3" }
+        filter { "configurations:debug", "toolset:clang" }
+            --buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
+            linkoptions { "-fsanitize=address,leak,undefined" }
+            defines { "DEBUG_SAN=1" }
+        filter { "configurations:debug or debug-vg", "toolset:clang or gcc" }
+            buildoptions { "-g" }
     end
 
-    include "extern/inut/inut.lua"
     include "absys.lua"
+    include "extern/backtrace.lua"
 
     project "test"
         kind "ConsoleApp"
         language "C"
-	libdirs {"/cm/shared/modules/intel/skylake/compiler/gcc/12.2.0/lib64"}
     	cdialect "C99"
-        buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
-	--linkoptions { "-fsanitize=address,leak,undefined", "-Wl,--export-dynamic" }
-        includedirs { "include", "extern/inut/include" }
-	defines { "ABSYS_DLL" }
-	libabsys {}
-	libinut {}
+
+        --buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
+        includedirs { "include" }
+	    defines { "ABSYS_DLL" }
+	    libabsys {}
+        libbacktrace {}
         files { "include/**.h", "test/**.c" }
 
 newoption {
@@ -57,7 +57,6 @@ newoption {
 }
 
 function install_action (prefix)
-    libdir = prefix .. "/lib/"
     os.mkdir(libdir)
     if os.host() == "windows" then
         assert(os.copyfile("bin/release/absys.lib", libdir .. "absys.lib"))

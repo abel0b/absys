@@ -12,5 +12,6 @@
 #define ABSYS_WHITE_FG_YELLOW "\033[1;39;43m"
 #define ABSYS_RESET "\033[0m"
 #define ABSYS_UNDERLINE "\033[4m"
+#define ABSYS_TAB "\t"
 
 #endif

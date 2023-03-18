@@ -2,7 +2,7 @@ filter "configurations:debug"
 	optimize "Debug"
 
 project "absys"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C"
    	cdialect "C99"
 	defines { "ABSYS_DLL", "ABSYS_DLL_EXPORTS" }

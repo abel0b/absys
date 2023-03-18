@@ -1,16 +1,17 @@
-#ifndef __ABSYS_TEST_h
-#ifndef __ABSYS_TEST_h
+#ifndef _ABSYS_TEST_H
+#define _ABSYS_TEST_H
 
+#include "absys/str.h"
+#include "absys/color.h"
 #include <stdio.h>
+#include <string.h>
 
-int _absys_test_strcmp(const char* s1, const char* s2);
-
-// TODO: dynamic string size
-// TODO: handle name conflicts
-#define INUT_MAX_STR 4096
-extern char _absys_test_buffer[INUT_MAX_STR];
-
-#define absys_test_typecheck(type,var) { typedef void (*type_t)(type); type_t tmp = (type_t)0; if(0) tmp(var);}
+extern struct absys_str _absys_test_buffer;
+extern int number_total;
+extern int number_passed;
+extern int number_failed;
+extern int number_skipped;
+extern int number_todo;
 
 #define _absys_test_wrap(block) do {\
 	block\
@@ -18,158 +19,128 @@ extern char _absys_test_buffer[INUT_MAX_STR];
 
 #define assert_zero(a) assert_int_equal(a, 0)
 
-#define _absys_test_assert_sprintf(LAB, FMTA, FMTB, VALA, VALB) sprintf(_absys_test_buffer, INUT_TAB INUT_RED "• Error: Expected %s " FMTA " to equal " FMTB INUT_RESET "\n\n" INUT_TAB INUT_GREEN "+ expected" INUT_RESET " " INUT_RED "- actual" INUT_RESET "\n\n" INUT_TAB INUT_GREEN "+ " FMTA INUT_RESET "\n" INUT_TAB INUT_RED "- " FMTB INUT_RESET "\n\n" INUT_TAB "at %s, line %d", LAB, VALA, VALB, VALA, VALB, __FILE__, __LINE__)
+#define _absys_assert_sprintf(LAB, FMTA, FMTB, VALA, VALB) absys_str_printf(&_absys_test_buffer, ABSYS_TAB ABSYS_RED "• Error: Expected %s " FMTA " to equal " FMTB ABSYS_RESET "\n\n" ABSYS_TAB ABSYS_GREEN "+ expected" ABSYS_RESET " " ABSYS_RED "- actual" ABSYS_RESET "\n\n" ABSYS_TAB ABSYS_GREEN "+ " FMTA ABSYS_RESET "\n" ABSYS_TAB ABSYS_RED "- " FMTB ABSYS_RESET "\n\n" ABSYS_TAB "at %s, line %d", LAB, VALA, VALB, VALA, VALB, __FILE__, __LINE__)
 
 #define assert_int_equal(expected, actual) _absys_test_wrap(\
-int _absys_test_expected = (expected);\
-int _absys_test_actual = (actual);\
-if(_absys_test_expected != _absys_test_actual) {\
-    _absys_test_assert_sprintf("int", "%d", "%d", _absys_test_expected, _absys_test_actual);\
-    return fail(_absys_test_buffer);\
+int _absys_expected = (expected);\
+int _absys_actual = (actual);\
+if(_absys_expected != _absys_actual) {\
+    _absys_assert_sprintf("int", "%d", "%d", _absys_expected, _absys_actual);\
+    return fail(_absys_test_buffer.data);\
 })
-
 
 #define assert_int_zero(actual) assert_int_equal(0, actual)
 
 #define assert_uint_equal(expected, actual) _absys_test_wrap(\
-unsigned int _absys_test_expected = (expected);\
-unsigned int _absys_test_actual = (actual);\
-if(_absys_test_expected != _absys_test_actual) {\
-    _absys_test_assert_sprintf("uint", "%u", "%u", _absys_test_expected, _absys_test_actual);\
-    return fail(_absys_test_buffer);\
+unsigned int _absys_expected = (expected);\
+unsigned int _absys_actual = (actual);\
+if(_absys_expected != _absys_actual) {\
+    _absys_assert_sprintf("uint", "%u", "%u", _absys_expected, _absys_actual);\
+    return fail(_absys_test_buffer.data);\
 })
 
 
 #define assert_ptr_equal(expected, actual) _absys_test_wrap(\
-void * _absys_test_expected = (expected);\
-void * _absys_test_actual = (actual);\
-if(_absys_test_expected != _absys_test_actual) {\
-    if (!_absys_test_expected) {\
-    	_absys_test_assert_sprintf("ptr", "%s", "%p", "NULL", _absys_test_actual);\
+void * _absys_expected = (expected);\
+void * _absys_actual = (actual);\
+if(_absys_expected != _absys_actual) {\
+    if (!_absys_expected) {\
+    	_absys_assert_sprintf("ptr", "%s", "%p", "NULL", _absys_actual);\
     }\
-    else if (!_absys_test_actual) {\
-    	_absys_test_assert_sprintf("ptr", "%p", "%s", _absys_test_expected, "NULL");\
+    else if (!_absys_actual) {\
+    	_absys_assert_sprintf("ptr", "%p", "%s", _absys_expected, "NULL");\
     }\
     else {\
-    	_absys_test_assert_sprintf("ptr", "%p", "%p", _absys_test_expected, _absys_test_actual);\
+    	_absys_assert_sprintf("ptr", "%p", "%p", _absys_expected, _absys_actual);\
     }\
-    return fail(_absys_test_buffer);\
+    return fail(_absys_test_buffer.data);\
 })
 
 #define assert_cstr_equal(expected, actual) _absys_test_wrap(\
-	char * _absys_test_expected = (expected);\
-	char * _absys_test_actual = (actual);\
-	int _absys_test_failed = 0;\
-	if (!_absys_test_expected) {\
-		_absys_test_assert_sprintf("cstr", "%s", "%s", "NULL", _absys_test_actual);\
-    		return fail(_absys_test_buffer);\
+	char * _absys_expected = (expected);\
+	char * _absys_actual = (actual);\
+	int _absys_failed = 0;\
+	if (!_absys_expected) {\
+		_absys_assert_sprintf("cstr", "%s", "%s", "NULL", _absys_actual);\
+    		return fail(_absys_test_buffer.data);\
 	}\
-	else if (!_absys_test_actual) {\
-		_absys_test_assert_sprintf("cstr", "%s", "%s", _absys_test_expected, "NULL");\
-    		return fail(_absys_test_buffer);\
+	else if (!_absys_actual) {\
+		_absys_assert_sprintf("cstr", "%s", "%s", _absys_expected, "NULL");\
+    		return fail(_absys_test_buffer.data);\
 	}\
-	else if(_absys_test_strcmp(_absys_test_expected, _absys_test_actual) != 0) {\
-		_absys_test_assert_sprintf("cstr", "%s", "%s", _absys_test_expected, _absys_test_actual);\
-    		return fail(_absys_test_buffer);\
+	else if(strcmp(_absys_expected, _absys_actual) != 0) {\
+		_absys_assert_sprintf("cstr", "%s", "%s", _absys_expected, _absys_actual);\
+    		return fail(_absys_test_buffer.data);\
 	}\
 )
 
 #define assert(actual) assert_bool(actual)
 
 #define assert_bool(actual) _absys_test_wrap(\
-int _absys_test_actual = (actual);\
-if(!_absys_test_actual) {\
-    _absys_test_assert_sprintf("bool", "%s", "%s", "true", "false");\
-    return fail(_absys_test_buffer);\
+int _absys_actual = (actual);\
+if(!_absys_actual) {\
+    _absys_assert_sprintf("bool", "%s", "%s", "true", "false");\
+    return fail(_absys_test_buffer.data);\
 })
 
-#define INUT_TAB "       "
-
-#define INUT_TEST_ROOT "root"
-#define INUT_TEST_PREFIX "------ "
-#define INUT_TEST_SUFFIX ""
-#define INUT_TEST_SEPARATOR " > "
-
-struct TestSuite * test_suite(struct TestSuite * parent, char * name);
-
-int test_case_id_gen();
-
-struct TestCase * test_case(struct TestSuite * parent, char * name, struct TestResult (*test)());
-
-struct TestResult pass();
-
-struct TestResult fail(char * diagnostic);
-
-struct TestResult skip();
-
-struct TestResult todo();
-
-int test_run(int argc, char * argv[]);
-
-extern int number_total;
-extern int number_passed;
-extern int number_failed;
-extern int number_skipped;
-extern int number_todo;
-
-void
-test_report_suite(char * complete_name);
-
-void
-test_report_case(struct TestCase * test_case, struct TestResult result);
-
-void
-test_report_results(long seed, long duration);
-
-struct TestSuite {
-    struct TestSuite * parent;
+struct absys_test_suite {
+    struct absys_test_suite * parent;
     char * name;
     char complete_name[256];
-    struct Array * test_suites;
-    struct Array * test_cases;
+    struct absys_vec test_suites;
+    struct absys_vec test_cases;
 };
 
-struct TestSuiteIterator {
-    struct Stack * stack;
-    struct TestSuite * begin;
-    struct TestSuite * current;
-};
-
-enum TestResultType {
+enum absys_test_result_type {
     TEST_RESULT_PASS,
     TEST_RESULT_FAIL,
     TEST_RESULT_SKIP,
     TEST_RESULT_TODO
 };
 
-struct TestResult {
-    enum TestResultType type;
+struct absys_test_result {
+    enum absys_test_result_type type;
     char * message;
 };
 
-struct TestCase {
+struct absys_test_case {
     char * description;
-    struct TestResult (*test)();
+    struct absys_test_result (*test)();
 };
 
-typedef struct TestResult test;
+typedef struct absys_test_result test;
 
-typedef struct TestSuite * suite;
+typedef struct absys_test_suite* suite;
 
-struct TestSuite * test_suite_resolve(struct TestSuite * suite, char * name);
+#define ABSYS_TEST_ROOT "root"
+#define ABSYS_TEST_PREFIX "------ "
+#define ABSYS_TEST_SUFFIX ""
+#define ABSYS_TEST_SEPARATOR " > "
 
-void test_case_destroy(struct TestCase * test);
+struct absys_test_suite * test_suite(struct absys_test_suite * parent, char * name);
 
-struct TestSuiteIterator * test_suite_it_make (struct TestSuite * suite);
+int test_case_id_gen();
 
-void test_suite_it_next (struct TestSuiteIterator * suite_it);
+struct absys_test_case * test_case(struct absys_test_suite * parent, char * name, struct absys_test_result (*test)());
 
-int test_suite_it_done (struct TestSuiteIterator * suite_it);
+struct absys_test_result pass();
 
-void test_suite_it_destroy(struct TestSuiteIterator * suite);
+struct absys_test_result fail(char * diagnostic);
 
-struct TestSuite * test_suite_it_get (struct TestSuiteIterator * suite_it);
+struct absys_test_result skip();
 
-void test_suite_destroy(struct TestSuite * suite);
+struct absys_test_result todo();
+
+int test_run(int argc, char * argv[]);
+
+void test_report_suite(char * complete_name);
+
+void test_report_case(struct absys_test_case * test_case, struct absys_test_result result);
+
+void test_report_results(long seed, double duration);
+
+struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name);
+
+void test_suite_del(struct absys_test_suite * suite);
 
 #endif

@@ -19,6 +19,7 @@ struct absys_vec {
 ABSYS_API void absys_vec_new(struct absys_vec* vec, size_t elem_size);
 ABSYS_API void absys_vec_del(struct absys_vec* vec);
 ABSYS_API bool absys_vec_empty(struct absys_vec* vec);
+ABSYS_API int absys_vec_size(struct absys_vec* vec);
 ABSYS_API void* absys_vec_get(struct absys_vec* vec, int idx);
 ABSYS_API void* absys_vec_last(struct absys_vec* vec);
 ABSYS_API void absys_vec_reserve(struct absys_vec* vec, int newcap);

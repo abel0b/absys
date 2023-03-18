@@ -32,6 +32,24 @@ ABSYS_API void absys_str_catf(struct absys_str* str, const char* fmt, ...) {
     str->len += len;
 }
 
+ABSYS_API void absys_str_printf(struct absys_str* str, const char* fmt, ...) {
+    va_list args;
+    va_start(args, fmt);
+    int len = vsnprintf(NULL, 0, fmt, args);
+    va_end(args);
+
+    while(str->cap < len + 1) {
+        str->cap = (str->cap)? 2 * str->cap : 8;
+        str->data = absys_realloc(str->data, sizeof(str->data[0]) * str->cap);
+    }
+
+    va_start(args, fmt);
+    vsnprintf(str->data, len + 1, fmt, args);
+    va_end(args);
+    str->len += len;
+}
+
+
 ABSYS_API void absys_str_cat(struct absys_str* str, const char* src) {
     int len = strlen(src);
     while(str->cap < str->len + len + 1) {
