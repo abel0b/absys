@@ -2,7 +2,10 @@ filter "configurations:debug"
 	optimize "Debug"
 
 project "backtrace"
-	kind "SharedLib"
+    prebuildcommands {
+        "test -f backtrace/config.h || ./backtrace/configure"
+    }
+    kind "SharedLib"
 	language "C"
    	cdialect "C99"
 	includedirs { "backtrace" }
