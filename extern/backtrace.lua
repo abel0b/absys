@@ -3,7 +3,7 @@ filter "configurations:debug"
 
 project "backtrace"
     prebuildcommands {
-        "test -f backtrace/config.h || ./backtrace/configure"
+        "test -f backtrace/config.h || (cd backtrace && ./configure)"
     }
     kind "SharedLib"
 	language "C"
