@@ -10,7 +10,7 @@
 #include <errno.h>
 #endif
 
-int absys_nproc() {
+int absys_nproc(void) {
   long nprocs = -1;
   long nprocs_max = -1;
 
