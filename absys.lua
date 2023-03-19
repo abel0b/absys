@@ -14,7 +14,7 @@ project "absys"
 		files { "include/**.h", "absys/**.h", "absys/**.c" }
 	end
 
-function libabsys()
+function use_absys()
 	links { "absys", "dl" }
 end
 

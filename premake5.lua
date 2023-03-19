@@ -1,3 +1,12 @@
+require "tools/utils"
+
+local config = {}
+config.backtrace = false
+if fexists("config.lua") then
+    local uconfig = require "config"
+    merge_tables(config, uconfig)
+end
+
 workspace "absys"
     configurations { "debug", "release", "debug-vg" }
 
@@ -27,7 +36,7 @@ workspace "absys"
 
     if os.host() == "linux" then
         filter { "configurations:debug", "toolset:clang" }
-            --buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
+            buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
             linkoptions { "-fsanitize=address,leak,undefined" }
             defines { "DEBUG_SAN=1" }
         filter { "configurations:debug or debug-vg", "toolset:clang or gcc" }
@@ -35,19 +44,22 @@ workspace "absys"
     end
 
     include "absys.lua"
-    include "extern/backtrace.lua"
+	if config.backtrace then
+        include "extern/backtrace.lua"
+    end
 
     project "test"
         kind "ConsoleApp"
         language "C"
     	cdialect "C99"
-
-        --buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
+        buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
         includedirs { "include" }
 	    defines { "ABSYS_DLL" }
-	    libabsys {}
-        libbacktrace {}
         files { "include/**.h", "test/**.c" }
+	    use_absys {}
+	    if config.backtrace then
+            use_backtrace {}
+        end
 
 newoption {
     trigger = "prefix",
@@ -77,11 +89,24 @@ newaction {
     trigger = "gen-compile-flags",
     description = "Generate compile_flags.txt for clangd",
     execute = function ()
+
         flags = io.open("compile_flags.txt", "w")
         flags:write("-Wall\n")
         flags:write("-Wextra\n")
         flags:write("-Iinclude\n")
         flags:close()
+    end
+}
+
+newaction {
+    trigger = "gen-config",
+    description = "Generate config.lua",
+    execute = function ()
+        config = io.open("config.lua", "w")
+        config:write("local config = {}\n")
+        config:write("config.foo = 42\n")
+        config:write("return config\n")
+        config:close()
     end
 }
 

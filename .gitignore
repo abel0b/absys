@@ -8,3 +8,4 @@ Makefile
 compile_flags.txt
 /next
 /dist
+config.lua
