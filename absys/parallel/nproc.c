@@ -4,6 +4,7 @@
 #include <string.h>
 
 #if WINDOWS
+#include <windows.h>
 #include <sysinfoapi.h>
 #else
 #include <unistd.h>
