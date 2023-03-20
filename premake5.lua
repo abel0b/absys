@@ -52,9 +52,8 @@ workspace "absys"
         kind "ConsoleApp"
         language "C"
     	cdialect "C99"
-        buildoptions { "-funwind-tables", "-fasynchronous-unwind-tables", "-fno-omit-frame-pointer", "-fno-optimize-sibling-calls" }
         includedirs { "include" }
-	    defines { "ABSYS_DLL" }
+	defines { "ABSYS_DLL" }
         files { "include/**.h", "test/**.c" }
 	    use_absys {}
 	    if config.backtrace then

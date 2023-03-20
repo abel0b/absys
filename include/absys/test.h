@@ -5,8 +5,9 @@
 #include "absys/color.h"
 #include <stdio.h>
 #include <string.h>
+#include "absys/defs.h"
 
-extern struct absys_str _absys_test_buffer;
+ABSYS_API extern struct absys_str _absys_test_buffer;
 extern int number_total;
 extern int number_passed;
 extern int number_failed;
@@ -117,30 +118,30 @@ typedef struct absys_test_suite* suite;
 #define ABSYS_TEST_SUFFIX ""
 #define ABSYS_TEST_SEPARATOR " > "
 
-struct absys_test_suite * test_suite(struct absys_test_suite * parent, char * name);
+ABSYS_API struct absys_test_suite * test_suite(struct absys_test_suite * parent, char * name);
 
-int test_case_id_gen();
+ABSYS_API int test_case_id_gen();
 
-struct absys_test_case * test_case(struct absys_test_suite * parent, char * name, struct absys_test_result (*test)());
+ABSYS_API struct absys_test_case * test_case(struct absys_test_suite * parent, char * name, struct absys_test_result (*test)());
 
-struct absys_test_result pass();
+ABSYS_API struct absys_test_result pass();
 
-struct absys_test_result fail(char * diagnostic);
+ABSYS_API struct absys_test_result fail(char * diagnostic);
 
-struct absys_test_result skip();
+ABSYS_API struct absys_test_result skip();
 
-struct absys_test_result todo();
+ABSYS_API struct absys_test_result todo();
 
-int test_run(int argc, char * argv[]);
+ABSYS_API int test_run(int argc, char * argv[]);
 
-void test_report_suite(char * complete_name);
+ABSYS_API void test_report_suite(char * complete_name);
 
-void test_report_case(struct absys_test_case * test_case, struct absys_test_result result);
+ABSYS_API void test_report_case(struct absys_test_case * test_case, struct absys_test_result result);
 
-void test_report_results(long seed, double duration);
+ABSYS_API void test_report_results(long seed, double duration);
 
-struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name);
+ABSYS_API struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name);
 
-void test_suite_del(struct absys_test_suite * suite);
+ABSYS_API void test_suite_del(struct absys_test_suite * suite);
 
 #endif
