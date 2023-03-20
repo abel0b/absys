@@ -15,6 +15,9 @@ project "absys"
 	end
 
 function use_absys()
-	links { "absys", "dl" }
+	links { "absys" }
+    	if os.host() ~= "windows" then
+		links { "dl" }
+	end
 end
 
