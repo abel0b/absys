@@ -21,7 +21,8 @@ int absys_nproc(void) {
 	GetSystemInfo(&info);
   	nprocs = info.dwNumberOfProcessors;
 #else
-	DWORD nprocs = GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
+	DWORD active_procs = GetActiveProcessorCount(ALL_PROCESSOR_GROUPS);
+	nprocs = (int)active_procs;
 #endif
 #else
 #ifdef _SC_NPROCESSORS_ONLN
