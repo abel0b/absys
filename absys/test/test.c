@@ -16,23 +16,23 @@ int number_failed = 0;
 int number_skipped = 0;
 int number_todo = 0;
 
-struct absys_test_result pass() {
+ABSYS_API struct absys_test_result pass() {
     return (struct absys_test_result) {TEST_RESULT_PASS, NULL};
 }
 
-struct absys_test_result fail (char * diagnostic) {
+ABSYS_API struct absys_test_result fail (char * diagnostic) {
     return (struct absys_test_result) {TEST_RESULT_FAIL, diagnostic};
 }
 
-struct absys_test_result skip () {
+ABSYS_API struct absys_test_result skip () {
     return (struct absys_test_result) {TEST_RESULT_SKIP, NULL};
 }
 
-struct absys_test_result todo () {
+ABSYS_API struct absys_test_result todo () {
     return (struct absys_test_result) {TEST_RESULT_TODO, NULL};
 }
 
-void test_init () {
+ABSYS_API void test_init () {
     test_root = malloc (sizeof (struct absys_test_suite));
     test_root->parent = test_root;
     test_root->name = ABSYS_TEST_ROOT;
@@ -42,7 +42,7 @@ void test_init () {
     absys_str_new(&_absys_test_buffer);
 }
 
-struct absys_test_suite * test_suite(struct absys_test_suite * suite, char * name) {
+ABSYS_API struct absys_test_suite * test_suite(struct absys_test_suite * suite, char * name) {
     if (test_root == NULL) {
         test_init();
     }
@@ -59,7 +59,7 @@ struct absys_test_suite * test_suite(struct absys_test_suite * suite, char * nam
     return (struct absys_test_suite*)absys_vec_last(&parent_suite->test_suites);
 }
 
-struct absys_test_case * test_case(struct absys_test_suite * suite, char * description, struct absys_test_result (*test)()) {
+ABSYS_API struct absys_test_case * test_case(struct absys_test_suite * suite, char * description, struct absys_test_result (*test)()) {
     struct absys_test_suite * parent_suite = (suite == NULL)? test_root : suite;
     
     struct absys_test_case test_case;
@@ -69,7 +69,7 @@ struct absys_test_case * test_case(struct absys_test_suite * suite, char * descr
     return absys_vec_last(&parent_suite->test_cases);
 }
 
-int test_run(int argc, char * argv[]) {
+ABSYS_API int test_run(int argc, char * argv[]) {
     struct absys_test_suite * suite = test_root;
     double t1, t2;
 
@@ -141,12 +141,12 @@ int test_run(int argc, char * argv[]) {
     return 0;
 }
 
-void
+ABSYS_API void
 test_report_suite(char * complete_name) {
     printf (ABSYS_BOLD ABSYS_TEST_PREFIX "%s\n" ABSYS_RESET, complete_name);
 }
 
-void
+ABSYS_API void
 test_report_case(struct absys_test_case * test_case, struct absys_test_result result) {
     number_total ++;
     switch(result.type) {
@@ -175,7 +175,7 @@ test_report_case(struct absys_test_case * test_case, struct absys_test_result re
     }
 }
 
-void
+ABSYS_API void
 test_report_progress_bar() {
     if (number_passed == number_total) return;
     int progress_pass = (float)number_passed / (float)number_total * 26;
@@ -213,7 +213,7 @@ test_report_progress_bar() {
     printf("\n");
 }
 
-void
+ABSYS_API void
 test_report_results(long seed, double duration) {
     printf("• done in %.2fs •\n\n", duration);
 
@@ -235,7 +235,7 @@ test_report_results(long seed, double duration) {
     printf("\nrandomized with seed " ABSYS_BOLD "%ld" ABSYS_RESET "\n", seed);
 }
 
-struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name) {
+ABSYS_API struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name) {
     struct absys_ptr_vec stack;
     absys_ptr_vec_new(&stack);
     absys_ptr_vec_push(&stack, (void*) suite);
@@ -259,7 +259,7 @@ struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, ch
     return NULL;
 }
 
-void test_suite_del(struct absys_test_suite * suite) {
+ABSYS_API void test_suite_del(struct absys_test_suite * suite) {
    for(int i = 0; i < absys_vec_size(&suite->test_suites); ++ i) {
         test_suite_del((struct absys_test_suite*) absys_vec_get(&suite->test_suites, i));
    }

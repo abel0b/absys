@@ -3,7 +3,7 @@
 
 // See https://gcc.gnu.org/wiki/Visibility
 
-#if defined _WIN32 || defined __CYGWIN__
+#if WINDOWS || defined(_WIN32) || defined(__CYGWIN__)
   #define ABSYS_HELPER_DLL_IMPORT __declspec(dllimport)
   #define ABSYS_HELPER_DLL_EXPORT __declspec(dllexport)
   #define ABSYS_HELPER_DLL_INTERNAL
@@ -31,6 +31,5 @@
     (void)(&__dummy == &__dummy2); \
     1; \
 })
-
 
 #endif
