@@ -1,6 +1,8 @@
 #include "absys/set.h"
 #include "absys/str.h"
 
+const char* absys_cstr_set_placeholder = "absys_cstr_set_placeholder";
+
 ABSYS_API void absys_cstr_set_new(struct absys_cstr_set* set) {
 	absys_trie_new(&set->trie);
 	set->size = 0;
@@ -15,14 +17,14 @@ ABSYS_API void absys_cstr_set_del(struct absys_cstr_set* set) {
 }
 
 ABSYS_API void absys_cstr_set_add(struct absys_cstr_set* set, char* cstr) {
-	absys_trie_set(&set->trie, cstr, (void*)0x42);
+	absys_trie_set(&set->trie, cstr, (void*)absys_cstr_set_placeholder);
 	set->size = set->trie.size;
 }
 
 ABSYS_API void absys_cstr_set_it_new(struct absys_cstr_set_it* iter, struct absys_cstr_set* set) {
 	absys_ptr_vec_new(&iter->node_stack);
 	absys_ptr_vec_new(&iter->str_stack);
-	absys_ptr_vec_push(&iter->node_stack, (void*) &((struct absys_trie_node*)set->trie.nodes.data)[0]);
+	absys_ptr_vec_push(&iter->node_stack, (void*) set->trie.root);
 	absys_objpool_new(&iter->str_pool, sizeof(struct absys_str), NULL);
 	iter->cur = NULL;
 }
@@ -69,5 +71,4 @@ ABSYS_API bool absys_cstr_set_it_next(struct absys_cstr_set_it* iter) {
 	else {
 		return absys_cstr_set_it_next(iter);
 	}
-	
 }

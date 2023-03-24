@@ -74,7 +74,7 @@ test test_trie(void) {
 
 	absys_trie_it_new(&iter, &mytrie);
 	
-	assert(absys_trie_it_next_prefix(&iter, ""));
+	assert_true(absys_trie_it_next_prefix(&iter, ""));
 	absys_trie_it_get(&iter, &key, &value);
 	assert_cstr_equal("", key);
 
@@ -100,7 +100,7 @@ test test_trie(void) {
 
 
 	absys_trie_it_new(&iter, &mytrie);
-	assert(absys_trie_it_next_prefix(&iter, "fogo"));
+	assert_true(absys_trie_it_next_prefix(&iter, "fogo"));
 	
 	absys_trie_it_get(&iter, &key, &value);
 	assert_cstr_equal("fogo", key);
@@ -111,7 +111,7 @@ test test_trie(void) {
 	
 
 	absys_trie_it_new(&iter, &mytrie);
-	assert(absys_trie_it_next_prefix(&iter, "foo"));
+	assert_true(absys_trie_it_next_prefix(&iter, "foo"));
 	
 	absys_trie_it_get(&iter, &key, &value);
 	assert_cstr_equal("foo", key);

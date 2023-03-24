@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdarg.h>
-#include <assert.h>
+#include "absys/utils.h"
 
 ABSYS_API void absys_str_stack_new(struct absys_str_stack* str_stack) {
     absys_objpool_new(&str_stack->objpool, sizeof(char), NULL);

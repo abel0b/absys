@@ -4,26 +4,26 @@
 
 void* absys_trie_notfound = (void*)"absys_trie_notfound";
 
+void absys_trie_node_del(void* elem_ptr) {
+        struct absys_trie_node* node = (struct absys_trie_node*)elem_ptr;
+		absys_ptr_vec_del(&node->children);
+}
+
 ABSYS_API void absys_trie_new(struct absys_trie* trie) {
 	absys_str_stack_new(&trie->strstack);
-	absys_vec_new(&trie->nodes, sizeof(struct absys_trie_node));	
-	struct absys_trie_node newnode;
-	absys_ptr_vec_new(&newnode.children);
-	newnode.prefix = "";
-	newnode.value = NULL;
-	newnode.isset = false;
-	absys_vec_push(&trie->nodes, (void*)&newnode);
+    absys_objpool_new(&trie->node_pool, sizeof(struct absys_trie_node), absys_trie_node_del);
 	trie->size = 0;
+    trie->root = (struct absys_trie_node*)absys_objpool_alloc(&trie->node_pool);
+	absys_ptr_vec_new(&trie->root->children);
+	trie->root->prefix = "";
+	trie->root->value = NULL;
+	trie->root->isset = false;
 }
 
 ABSYS_API void absys_trie_del(struct absys_trie* trie) {
 	absys_str_stack_del(&trie->strstack);
-	for(int i = 0; i < trie->nodes.size; ++i) {
-		absys_ptr_vec_del(&((struct absys_trie_node *) absys_vec_get(&trie->nodes, i))->children);
-	}
-	absys_vec_del(&trie->nodes);
+    absys_objpool_del(&trie->node_pool);
 }
-
 
 // returns 0 if $str = $prefix
 // prefix length if $prefix is a prefix of $str
@@ -44,21 +44,8 @@ static int absys_str_prefix_cmp(const char* prefix, const char* str) {
 	return -1;
 }
 
-
-static struct absys_trie_node* absys_trie_node_alloc(struct absys_trie* trie, char* prefix, void* value, bool isset) {
-	struct absys_trie_node newnode;
-	absys_ptr_vec_new(&newnode.children);
-	newnode.prefix = prefix;
-	newnode.value = value;
-	newnode.isset = isset;
-	absys_vec_push(&trie->nodes, (void*)&newnode);
-	struct absys_trie_node* node = (struct absys_trie_node*) absys_vec_last(&trie->nodes);
-
-	return node;
-}
-
 ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* value) {
-	struct absys_trie_node * node = &((struct absys_trie_node*)trie->nodes.data)[0];
+	struct absys_trie_node * node = trie->root;
 	int keylen = strlen(key);
 
 	if (*key == '\0') {
@@ -72,8 +59,8 @@ ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* va
 	while (idx < keylen) {
 		struct absys_trie_node* best_match = NULL;
 		int best_match_cnt = 0;
-		for (int i = 0; i < node->children.size; ++i) {
-			struct absys_trie_node* child = (struct absys_trie_node*) absys_ptr_vec_get(&node->children, i);
+		for (int i = 0; i < absys_ptr_vec_size(&node->children); ++i) {
+			struct absys_trie_node* child = (struct absys_trie_node*)absys_ptr_vec_get(&node->children, i);
 			int pos = absys_str_prefix_cmp(child->prefix, &key[idx]);
 			if (pos > best_match_cnt) {
 				best_match_cnt = pos;
@@ -89,17 +76,19 @@ ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* va
 			}
 		}
 	
-		if (best_match)	{
+		if (best_match) {
 			// split insert	
 			int len_best_match = strlen(best_match->prefix);
 			if (best_match_cnt < len_best_match) {
 				char* newpref = absys_str_stack_push(&trie->strstack, &best_match->prefix[best_match_cnt]);
-				struct absys_trie_node* new_node = (struct absys_trie_node*)absys_trie_node_alloc(trie, newpref, best_match->value, best_match->isset);
-				absys_ptr_vec_del(&new_node->children);
-				new_node->children = best_match->children;
+				struct absys_trie_node* newnode = (struct absys_trie_node*)absys_objpool_alloc(&trie->node_pool);
+				newnode->children = best_match->children;
+                newnode->prefix = newpref;
+	            newnode->value = best_match->value;
+	            newnode->isset = best_match->isset;
 
 				absys_ptr_vec_new(&best_match->children);
-				absys_ptr_vec_push(&best_match->children, (void*)new_node);
+				absys_ptr_vec_push(&best_match->children, (void*)newnode);
 				best_match->prefix[best_match_cnt] = '\0';
 				best_match->isset = false;
 			}
@@ -109,14 +98,13 @@ ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* va
 		}
 
 		// insert child
-		struct absys_trie_node newnode;
-		absys_ptr_vec_new(&newnode.children);
+		struct absys_trie_node* newnode = (struct absys_trie_node*) absys_objpool_alloc(&trie->node_pool);
+		absys_ptr_vec_new(&newnode->children);
 		char* newpref = absys_str_stack_push(&trie->strstack, &key[idx]);
-		newnode.prefix = newpref;
-		newnode.value = value;
-		newnode.isset = true;
-		absys_vec_push(&trie->nodes, (void*)&newnode);
-		absys_ptr_vec_push(&node->children, absys_vec_last(&trie->nodes));
+		newnode->prefix = newpref;
+		newnode->value = value;
+		newnode->isset = true;
+		absys_ptr_vec_push(&node->children, (void*)newnode);
 		++ trie->size;
 		return;
 	}
@@ -126,8 +114,30 @@ ABSYS_API int absys_trie_size(struct absys_trie* trie) {
 	return trie->size;
 }
 
+static void absys_trie_print_rec(struct absys_trie_node* node, int indent_level) {
+	for(int ii = 0; ii < indent_level; ++ii) {
+		printf("\t");
+	}
+
+	if (node->isset) {
+		printf("Node(\"%s\", %p)\n", node->prefix, node->value);
+	}
+	else {
+		printf("Node(\"%s\", nullptr)\n", node->prefix);
+	}
+
+	for (int i = 0; i < absys_ptr_vec_size(&node->children); ++i) {
+	    struct absys_trie_node* child = absys_ptr_vec_get(&node->children, i);
+		absys_trie_print_rec(child, indent_level + 1);
+	}
+}
+
+ABSYS_API void absys_trie_print(struct absys_trie* trie) {
+	absys_trie_print_rec(trie->root, 0);
+}
+
 ABSYS_API void* absys_trie_get(struct absys_trie* trie, const char* key) {
-	struct absys_trie_node * node = &((struct absys_trie_node*)trie->nodes.data)[0];
+	struct absys_trie_node * node = trie->root;
 	int keylen = strlen(key);
 
 	if (*key == '\0') {
@@ -180,7 +190,7 @@ ABSYS_API void absys_trie_it_new(struct absys_trie_it* iter, struct absys_trie* 
 	struct absys_str* empty_str = (struct absys_str*) absys_objpool_alloc(&iter->str_pool);
 	absys_str_new(empty_str);
 	absys_ptr_vec_push(&iter->str_stack, (void*)empty_str);
-	absys_ptr_vec_push(&iter->node_stack, absys_vec_get(&trie->nodes, 0));
+	absys_ptr_vec_push(&iter->node_stack, (void*)trie->root);
 }
 
 ABSYS_API void absys_trie_it_del(struct absys_trie_it* iter) {
@@ -286,23 +296,6 @@ ABSYS_API bool absys_trie_it_next_prefix(struct absys_trie_it* iter, const char*
 	// unreachable
 	return false;
 }
-
-/*
-ABSYS_API bool absys_trie_print(struct absys_trie* trie) {
-	struct absys_ptr_vec stack;
-	absys_ptr_vec_new(&stack);
-	absys_ptr_vec_push(&stack, absys_vec_get_ref(&trie->nodes, 0));
-
-	while(absys_ptr_vec_empty(&stack)) {
-		char* key;
-		void* value;
-		absys_trie_it_get(&iter, &key, &value);
-		print(""
-	}
-
-	absys_trie_it_del(&iter, trie);
-}
-*/
 
 ABSYS_API bool absys_trie_it_next(struct absys_trie_it* iter) {
 	if (absys_ptr_vec_empty(&iter->node_stack)) {

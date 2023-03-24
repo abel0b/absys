@@ -6,6 +6,7 @@
 #include "absys/log.h"
 #include "absys/mem.h"
 #include "absys/defs.h"
+#include "absys/utils.h"
 
 // TODO: add safe mode
 
@@ -46,6 +47,7 @@ ABSYS_API int absys_##NAME##_vec_size(struct absys_##NAME##_vec* vec);\
 ABSYS_API void absys_##NAME##_vec_reserve(struct absys_##NAME##_vec* vec, int newcap);\
 ABSYS_API void absys_##NAME##_vec_resize(struct absys_##NAME##_vec* vec, int newsize);\
 ABSYS_API void absys_##NAME##_vec_push(struct absys_##NAME##_vec* vec, QUAL TYPE elem);\
+ABSYS_API void absys_##NAME##_vec_set(struct absys_##NAME##_vec* vec, int pos, QUAL TYPE elem);\
 ABSYS_API TYPE absys_##NAME##_vec_get(struct absys_##NAME##_vec* vec, int idx);\
 ABSYS_API TYPE *absys_##NAME##_vec_get_ref(struct absys_##NAME##_vec* vec, int idx);\
 ABSYS_API TYPE absys_##NAME##_vec_first(struct absys_##NAME##_vec* vec);\
@@ -96,6 +98,9 @@ ABSYS_API void absys_##NAME##_vec_push(struct absys_##NAME##_vec* vec, QUAL TYPE
     vec->data[vec->size] = elem;\
     ++ vec->size;\
 }\
+ABSYS_API void absys_##NAME##_vec_set(struct absys_##NAME##_vec* vec, int pos, QUAL TYPE elem) {\
+    vec->data[pos] = elem;\
+}\
 ABSYS_API TYPE absys_##NAME##_vec_pop(struct absys_##NAME##_vec* vec) {\
     return vec->data[--vec->size];\
 }\
@@ -124,6 +129,7 @@ ABSYS_API void absys_##NAME##_vec_it_new(struct absys_##NAME##_vec_it* iter, str
 	iter->cursor = -1;\
 }\
 ABSYS_API void absys_##NAME##_vec_it_del(struct absys_##NAME##_vec_it* iter) {\
+absys_unused(iter);\
 }\
 ABSYS_API void absys_##NAME##_vec_it_get(struct absys_##NAME##_vec_it* iter, TYPE* value) {\
 	*value = iter->vec->data[iter->cursor];\

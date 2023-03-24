@@ -2,9 +2,9 @@
 #define ABSYSqueue__H
 
 #include <stdlib.h>
-#include <assert.h>
 #include "absys/log.h"
 #include "absys/mem.h"
+#include "absys/utils.h"
 
 struct absys_queue {
     void* data;
@@ -63,7 +63,7 @@ ABSYS_API void absys_queue_##NAME##_enqueue(struct absys_queue_##NAME* queue, TY
    ++ queue->size;\
 }\
 ABSYS_API TYPE absys_queue_##NAME##_dequeue(struct absys_queue_##NAME* queue) {\
-    assert(queue->size > 0);\
+    absys_assert(queue->size > 0);\
     -- queue->size;\
     return queue->data[queue->size];\
 }

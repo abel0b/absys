@@ -1,7 +1,7 @@
 #include "absys/vec.h"
 #include "absys/mem.h"
 #include <string.h>
-#include <assert.h>
+#include "absys/utils.h"
 
 // TODO: shrink vec allocated memory when removing elements
 
@@ -48,7 +48,7 @@ ABSYS_API void absys_vec_push(struct absys_vec* vec, void* elem) {
 
 ABSYS_API void absys_vec_pop(struct absys_vec* vec, void* elem) {
 #if DEBUG
-    assert(vec->size);
+    absys_assert(vec->size);
 #endif
     if (elem != NULL) {
         memcpy(elem, (char*)vec->data + (vec->size - 1) * vec->elem_size, vec->elem_size);
@@ -58,7 +58,7 @@ ABSYS_API void absys_vec_pop(struct absys_vec* vec, void* elem) {
 
 ABSYS_API void absys_vec_peek(struct absys_vec* vec, void* elem) {
 #if DEBUG
-    assert(vec->size);
+    absys_assert(vec->size);
 #endif
     if (elem != NULL) {
         memcpy(elem, (char*)vec->data + (vec->size - 1) * vec->elem_size, vec->elem_size);
@@ -67,7 +67,7 @@ ABSYS_API void absys_vec_peek(struct absys_vec* vec, void* elem) {
 
 ABSYS_API void* absys_vec_get(struct absys_vec* vec, int idx) {
 #if DEBUG
-    assert(idx < vec->size);
+    absys_assert(idx < vec->size);
 #endif
     return (char*)vec->data + idx * vec->elem_size;
 }

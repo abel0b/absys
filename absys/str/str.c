@@ -4,7 +4,7 @@
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
-#include <assert.h>
+#include "absys/utils.h"
 
 absys_vec_impl(struct absys_str, str)
 
@@ -66,7 +66,12 @@ ABSYS_API void absys_str_resize(struct absys_str* str, long int len) {
         str->data = absys_realloc(str->data, sizeof(str->data[0]) * str->cap);
     }
     str->len = len;
-    str->data[str->len] = '\0';
+    str->data[len] = '\0';
+}
+
+ABSYS_API void absys_str_flush(struct absys_str* str) {
+    str->len = 0;
+    str->data[0] = '\0';
 }
 
 ABSYS_API void absys_str_del(struct absys_str* str) {

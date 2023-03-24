@@ -7,6 +7,7 @@
 #include "absys/defs.h"
 #include "absys/vec.h"
 #include "absys/strstack.h"
+#include "absys/objpool.h"
 
 struct absys_trie_node {
 	struct absys_ptr_vec children;
@@ -17,7 +18,8 @@ struct absys_trie_node {
 
 struct absys_trie {
     struct absys_str_stack strstack;
-    struct absys_vec nodes;
+    struct absys_trie_node* root;
+    struct absys_objpool node_pool;
     int size;
 };
 
@@ -29,6 +31,7 @@ ABSYS_API void absys_trie_del(struct absys_trie* trie);
 ABSYS_API int absys_trie_size(struct absys_trie* trie);
 ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* value);
 ABSYS_API void* absys_trie_get(struct absys_trie* trie, const char* key);
+ABSYS_API void absys_trie_print(struct absys_trie* trie);
 
 struct absys_trie_it {
 	struct absys_ptr_vec node_stack;

@@ -74,9 +74,9 @@ if(_absys_expected != _absys_actual) {\
 	}\
 )
 
-#define assert(actual) assert_bool(actual)
+#define assert_true(actual) assert_bool_true(actual)
 
-#define assert_bool(actual) _absys_test_wrap(\
+#define assert_bool_true(actual) _absys_test_wrap(\
 int _absys_actual = (actual);\
 if(!_absys_actual) {\
     _absys_assert_sprintf("bool", "%s", "%s", "true", "false");\

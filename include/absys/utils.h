@@ -1,12 +1,12 @@
-#ifndef ABSYSMISC__H
-#define ABSYSMISC__H
+#ifndef __DEBUG_UTILS_h
+#define __DEBUG_UTILS_h
 
+#include "debugbreak.h"
+#include <stdlib.h>
+#include "absys/log.h"
 #if DEBUG_SAN
 #include <sanitizer/common_interface_defs.h>
 #endif
-
-#include <stdlib.h>
-#include "absys/log.h"
 
 #if WINDOWS
 #define DS '\\'
@@ -20,11 +20,9 @@
 #define UNIX 1
 #endif
 
-#define todo() do { fprintf(stderr, "TODO at %s:%d\n", __FILE__, __LINE__); exit(1); } while(0)
+#define absys_assert(cond) if (!(cond)) { fprintf(stderr, "assertion failed at %s:%d: %s\n", __FILE__, __LINE__, #cond); debug_break(); }
 
 #define absys_todo(...) do { absys_elog("TODO feature at %s:%s:%d", __FILE__, __func__, __LINE__); absys_elog(__VA_ARGS__); exit(1); } while(0)
-
-#define unused(X) do { (void)(X); } while(0)
 
 #define absys_unused(X) do { (void)(X); } while(0)
 
@@ -33,5 +31,6 @@
 #else
 #define absys_exit(X) exit(X)
 #endif
+
 
 #endif

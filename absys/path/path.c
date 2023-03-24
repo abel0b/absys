@@ -1,10 +1,10 @@
 #include "absys/path.h"
 #include "absys/fs.h"
-#include <assert.h>
+#include "absys/utils.h"
 #include <stdarg.h>
 
 ABSYS_API void absys_path_push(struct absys_str* path, char* subpath) {
-    assert(path->len);
+    absys_assert(path->len);
     if (absys_path_isds(path->data[path->len - 1])) {
         absys_str_cat(path, subpath);
     }
