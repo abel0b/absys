@@ -53,7 +53,7 @@ static void absys_##NAME##_objpool_chunk_new(struct absys_##NAME##_objpool_chunk
 static void absys_##NAME##_objpool_chunk_del(struct absys_##NAME##_objpool_chunk* chunk) {\
     absys_free(chunk->data);\
 }\
-ABSYS_API void absys_##NAME##_objpool_new(struct absys_##NAME##_objpool* objpool, size_t elem_size, void del(void*)) {\
+ABSYS_API void absys_##NAME##_objpool_new(struct absys_##NAME##_objpool* objpool) {\
     absys_assert(sizeof(TYPE) < ABSYS_OBJPOOL_CHUNK_SIZE);\
     objpool->cap_chunks = 1;\
     objpool->num_chunks = 1;\

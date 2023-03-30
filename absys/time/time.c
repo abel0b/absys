@@ -2,6 +2,7 @@
 #include "absys/log.h"
 #include <stdlib.h>
 
+
 #if WINDOWS
 #include <windows.h>
 // credit: https://stackoverflow.com/a/26085827
@@ -28,45 +29,70 @@ int gettimeofday(struct timeval * tp, struct timezone * tzp) {
 #include <sys/time.h>
 #endif
 
-ABSYS_API void absys_timer_start(struct absys_timer* timer) {
-    int rc = gettimeofday(&timer->start, NULL);
-    if (rc != 0) exit(1);
-}
-
-ABSYS_API int absys_timer_end(struct absys_timer* timer) { 
-    int rc = gettimeofday(&timer->end, NULL);
-    if (rc != 0) exit(1);
-    int time_us = (timer->end.tv_sec - timer->start.tv_sec) * 1000000 + (timer->end.tv_usec - timer->start.tv_usec);
-    return time_us;
-}
-
-ABSYS_API int absys_time_get() {
-    struct timeval tv;
-    int rc = gettimeofday(&tv, NULL);
-    if (rc != 0) {
-        absys_elog("could not get time");
-        exit(1);
-    }
-    return tv.tv_sec;
-}
-
 ABSYS_API double absys_get_wtime( void ) {
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    struct timespec ts;
+    int rc = clock_gettime(CLOCK_REALTIME, &ts);
+#else
     struct timeval tv;
     int rc = gettimeofday( &tv, NULL );
+#endif
     if (rc != 0) {
         absys_elog("could not get time");
         exit(1);
     }
-    double t = tv.tv_sec + tv.tv_usec / 1.0e6;
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    double t = ts.tv_sec + ts.tv_nsec * 1.0e-9L;
+#else
+    double t = tv.tv_sec + tv.tv_usec * 1.0e-6L;
+#endif
     return t;
 }
 
+ABSYS_API void absys_timer_start(struct absys_timer* timer) {
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    int rc = clock_gettime(CLOCK_REALTIME, &timer->start);
+#else
+    int rc = gettimeofday(&timer->start, NULL);
+#endif
+    if (rc != 0) {
+	exit(1);
+    }
+}
+
+ABSYS_API long absys_timer_end(struct absys_timer* timer) { 
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    int rc = clock_gettime(CLOCK_REALTIME, &timer->end);
+#else
+    int rc = gettimeofday(&timer->end, NULL);
+#endif
+    if (rc != 0) {
+	    exit(1);
+	}
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    long time_us = (timer->end.tv_sec - timer->start.tv_sec) * 1e6 + (timer->end.tv_nsec - timer->start.tv_nsec) * 1e3;
+#else
+    long time_us = (timer->end.tv_sec - timer->start.tv_sec) * 1e6 + (timer->end.tv_usec - timer->start.tv_usec);
+#endif
+    return time_us;
+}
+
+
 ABSYS_API uint64_t absys_time_get_us() {
-    struct timeval tv;
-    int rc = gettimeofday(&tv, NULL);
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+	struct timespec ts;
+    	int rc = clock_gettime(CLOCK_REALTIME, &ts);
+#else
+	struct timeval tv;
+	int rc = gettimeofday(&tv, NULL);
+#endif
     if (rc != 0) {
         absys_elog("could not get time");
         exit(1);
-    }
-    return tv.tv_sec * 1000000 + tv.tv_usec;
+     }
+#ifdef ABSYS_TIMING_BACKEND_CLOCK_GETTIME
+    return ts.tv_sec * 1e6 + ts.tv_nsec * 1e3;
+#else
+    return tv.tv_sec * 1e6 + tv.tv_usec;
+#endif
 }
