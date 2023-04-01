@@ -1,5 +1,5 @@
-#ifndef ABSYSTESTDICT__H
-#define ABSYSTESTDICT__H
+#ifndef ABSYSTESTHOOK__H
+#define ABSYSTESTHOOK__H
 
 #include "absys/test.h"
 
