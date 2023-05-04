@@ -1,8 +1,6 @@
-#include "absys/parallel.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
 #if WINDOWS
 #include <windows.h>
 #include <sysinfoapi.h>
@@ -10,6 +8,8 @@
 #include <unistd.h>
 #include <errno.h>
 #endif
+
+#include "absys/para.h"
 
 int absys_nproc(void) {
   long nprocs = -1;
