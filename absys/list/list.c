@@ -1,23 +1,23 @@
 #include "absys/list.h"
 
-static void absys_list_node_new(struct absys_list_node* node, int elem_size) {
+static void absys_list_node_init(struct absys_list_node* node, int elem_size) {
 	node->size = 0;
 	node->prev = node;
 	node->next = node;
 	node->data = malloc(elem_size * ABSYS_LIST_UNROLL_FACTOR);
 }
 
-ABSYS_API void absys_list_new(struct absys_list* list, size_t elem_size) {
+ABSYS_API void absys_list_init(struct absys_list* list, size_t elem_size) {
 	list->size = 0;
 	list->elem_size = elem_size;
-	absys_objpool_new(&list->node_pool, sizeof(struct absys_list_node), NULL);
+	absys_objpool_init(&list->node_pool, sizeof(struct absys_list_node), NULL);
 	list->head = absys_objpool_alloc(&list->node_pool);
 	list->tail = list->head;
-	absys_list_node_new(list->head, list->elem_size);
+	absys_list_node_init(list->head, list->elem_size);
 }
 
-ABSYS_API void absys_list_del(struct absys_list* list) {
-	absys_objpool_del(&list->node_pool);
+ABSYS_API void absys_list_exit(struct absys_list* list) {
+	absys_objpool_exit(&list->node_pool);
 }
 
 ABSYS_API bool absys_list_empty(struct absys_list* list) {
@@ -114,4 +114,31 @@ ABSYS_API void absys_list_pop(struct absys_list* list, void* elem) {
 	void* value_store = list->tail->data + list->elem_size * (list->tail->size - 1);
 	memcpy(elem, value_store, list->elem_size);
 	_absys_list_rem(list, list->tail, list->tail->size - 1);
+}
+
+ABSYS_API void absys_list_it_init(struct absys_list_it* iter, struct absys_list* list) {
+	iter->list = list;
+	iter->node = list->head;
+	iter->cursor = 0;
+}
+
+ABSYS_API void absys_list_it_exit(struct absys_list_it* iter) {
+
+}
+
+ABSYS_API void absys_list_it_get(struct absys_list_it* iter, void* value) {
+	memcpy(value, iter->node->data + iter->cursor * iter->list->elem_size, iter->list->elem_size);
+}
+
+ABSYS_API bool absys_list_it_next(struct absys_list_it* iter) {
+	if (iter->cursor < iter->node->size - 1) {
+		++ iter->cursor;
+		return true;
+	}
+	else if (iter->node->next != iter->list->head) {
+		iter->node = iter->node->next;
+		iter->cursor = 0;
+		return true;
+	}
+	return false;
 }

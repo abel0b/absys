@@ -3,7 +3,7 @@
 
 test test_vec(void) {
     struct absys_vec myvec;
-    absys_vec_new(&myvec, sizeof(int));
+    absys_vec_init(&myvec, sizeof(int));
     assert_true(absys_vec_empty(&myvec));
     assert_int_equal(0, myvec.size);
     assert_uint_equal(sizeof(0), myvec.elem_size);
@@ -24,6 +24,6 @@ test test_vec(void) {
     absys_vec_pop(&myvec, &val);
     assert_int_equal(42, val);
     assert_int_equal(0, myvec.size);
-    absys_vec_del(&myvec);
+    absys_vec_exit(&myvec);
     return pass();
 }

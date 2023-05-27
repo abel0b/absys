@@ -2,12 +2,12 @@
 #include "absys/mem.h"
 #include "absys/utils.h"
 
-static void absys_objpool_chunk_new(struct absys_objpool_chunk* chunk) {
+static void absys_objpool_chunk_init(struct absys_objpool_chunk* chunk) {
     chunk->capacity = ABSYS_OBJPOOL_CHUNK_SIZE;
     chunk->cursor = 0;
     chunk->data = (char*)absys_malloc(chunk->capacity);
 }
-static void absys_objpool_chunk_del(struct absys_objpool_chunk* chunk, size_t elem_size, void del(void*)) {
+static void absys_objpool_chunk_exit(struct absys_objpool_chunk* chunk, size_t elem_size, void del(void*)) {
     if (del) {
         for(size_t i = 0; i * elem_size < (size_t)chunk->cursor; i++) {
             del((void*)&chunk->data[i * elem_size]);
@@ -16,20 +16,20 @@ static void absys_objpool_chunk_del(struct absys_objpool_chunk* chunk, size_t el
     absys_free(chunk->data);
 }
 
-ABSYS_API void absys_objpool_new(struct absys_objpool* objpool, size_t elem_size, void del(void*)) {
+ABSYS_API void absys_objpool_init(struct absys_objpool* objpool, size_t elem_size, void del(void*)) {
     absys_assert(elem_size < ABSYS_OBJPOOL_CHUNK_SIZE);
     objpool->cap_chunks = 1;
     objpool->num_chunks = 1;
     objpool->elem_size = elem_size;
     objpool->chunks = absys_malloc(sizeof(struct absys_objpool_chunk));
-    absys_objpool_chunk_new(&objpool->chunks[0]);
+    absys_objpool_chunk_init(&objpool->chunks[0]);
     objpool->del = del;
 }
 
-ABSYS_API void absys_objpool_del(struct absys_objpool* objpool) {
+ABSYS_API void absys_objpool_exit(struct absys_objpool* objpool) {
     if (objpool->cap_chunks) {
         for(int i = 0; i < objpool->num_chunks; ++i) {
-            absys_objpool_chunk_del(&objpool->chunks[i], objpool->elem_size, objpool->del);
+            absys_objpool_chunk_exit(&objpool->chunks[i], objpool->elem_size, objpool->del);
         }
         absys_free(objpool->chunks);
     }
@@ -44,7 +44,7 @@ ABSYS_API void* absys_objpool_alloc(struct absys_objpool* objpool) {
         }
         ++ chunk;
         ++ objpool->num_chunks;
-        absys_objpool_chunk_new(&objpool->chunks[chunk]);
+        absys_objpool_chunk_init(&objpool->chunks[chunk]);
     }
 
     void* obj = (void*) (objpool->chunks[chunk].data + objpool->chunks[chunk].cursor);
@@ -62,7 +62,7 @@ ABSYS_API void* absys_objpool_arralloc(struct absys_objpool* objpool, int count)
         }
         ++ chunk;
         ++ objpool->num_chunks;
-        absys_objpool_chunk_new(&objpool->chunks[chunk]);
+        absys_objpool_chunk_init(&objpool->chunks[chunk]);
     }
 
     void* obj = (void*) (objpool->chunks[chunk].data + objpool->chunks[chunk].cursor);

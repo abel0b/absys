@@ -3,7 +3,7 @@
 
 absys_queue_impl(int, int)
 
-ABSYS_API void absys_queue_new(struct absys_queue* queue, size_t elem_size) {
+ABSYS_API void absys_queue_init(struct absys_queue* queue, size_t elem_size) {
     queue->front = 0;
     queue->capacity = 8;
     queue->size = 0;
@@ -11,7 +11,7 @@ ABSYS_API void absys_queue_new(struct absys_queue* queue, size_t elem_size) {
     queue->data = absys_malloc(elem_size * queue->capacity);
 }
 
-ABSYS_API void absys_queue_del(struct absys_queue* queue) {
+ABSYS_API void absys_queue_exit(struct absys_queue* queue) {
     if (queue->data) {
         absys_free(queue->data);
     }

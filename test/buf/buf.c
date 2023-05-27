@@ -4,7 +4,7 @@
 
 test test_buf(void) {
     struct absys_buf mybuf;
-    absys_buf_new(&mybuf);
+    absys_buf_init(&mybuf);
     int mydata[42];
     for(int i = 0; i < 42; i++) {
         mydata[i] = i;
@@ -15,6 +15,6 @@ test test_buf(void) {
     assert_int_equal(i, ((int*)mybuf.data)[i]);
     absys_buf_flush(&mybuf);
     assert_int_equal(mybuf.size, 0);
-    absys_buf_del(&mybuf);
+    absys_buf_exit(&mybuf);
     return pass();
 }

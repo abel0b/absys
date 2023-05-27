@@ -26,8 +26,8 @@ struct absys_trie {
 extern void* absys_trie_notfound;
 
 
-ABSYS_API void absys_trie_new(struct absys_trie* trie);
-ABSYS_API void absys_trie_del(struct absys_trie* trie);
+ABSYS_API void absys_trie_init(struct absys_trie* trie);
+ABSYS_API void absys_trie_exit(struct absys_trie* trie);
 ABSYS_API int absys_trie_size(struct absys_trie* trie);
 ABSYS_API void absys_trie_set(struct absys_trie* trie, const char* key, void* value);
 ABSYS_API void* absys_trie_get(struct absys_trie* trie, const char* key);
@@ -41,8 +41,8 @@ struct absys_trie_it {
 	void* cur_value;
 };
 
-ABSYS_API void absys_trie_it_new(struct absys_trie_it* iter, struct absys_trie* set);
-ABSYS_API void absys_trie_it_del(struct absys_trie_it* iter);
+ABSYS_API void absys_trie_it_init(struct absys_trie_it* iter, struct absys_trie* set);
+ABSYS_API void absys_trie_it_exit(struct absys_trie_it* iter);
 ABSYS_API void absys_trie_it_get(struct absys_trie_it* iter, char**key, void**value);
 ABSYS_API bool absys_trie_it_next(struct absys_trie_it* iter);
 ABSYS_API bool absys_trie_it_next_prefix(struct absys_trie_it* iter, const char* prefix);

@@ -3,13 +3,13 @@
 #include <string.h>
 #include "absys/utils.h"
 
-ABSYS_API void absys_buf_new(struct absys_buf* buf) {
+ABSYS_API void absys_buf_init(struct absys_buf* buf) {
     buf->size = 0;
     buf->capacity = 1024;
     buf->data = absys_malloc(buf->capacity);
 }
 
-ABSYS_API void absys_buf_del(struct absys_buf* buf) {
+ABSYS_API void absys_buf_exit(struct absys_buf* buf) {
     absys_free(buf->data);
 }
 

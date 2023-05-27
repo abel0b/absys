@@ -15,8 +15,8 @@ struct absys_filebuf {
 	FILE* file_buf;		
 };
 
-ABSYS_API void absys_filebuf_new(struct absys_filebuf* filebuf, char* filepath, size_t flush_size);
-ABSYS_API void absys_filebuf_del(struct absys_filebuf* filebuf);
+ABSYS_API void absys_filebuf_init(struct absys_filebuf* filebuf, char* filepath, size_t flush_size);
+ABSYS_API void absys_filebuf_exit(struct absys_filebuf* filebuf);
 ABSYS_API void absys_filebuf_flush(struct absys_filebuf* filebuf);
 ABSYS_API void absys_filebuf_update(struct absys_filebuf* filebuf);
 

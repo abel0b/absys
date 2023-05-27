@@ -1,4 +1,4 @@
-option("absys-enable-test")
+option("absys_enable_test")
 	set_default(false)
 	set_showmenu(true)
 	set_description("Enable absys test target")
@@ -41,7 +41,7 @@ target("absys")
 	add_files("absys/**.c")
 	--add_files("next/**.c")
 
-if has_config("absys-enable-test") then
+if has_config("absys_enable_test") then
 	target("absys_test")
 		add_deps("absys")
 		add_includedirs("include")

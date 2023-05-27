@@ -1,0 +1,21 @@
+{
+    errdata = "In file included from \27[01m\27[Kinclude/dagman/task.h:7\27[m\27[K,\
+                 from \27[01m\27[Ksrc/dagman/task.c:1\27[m\27[K:\
+\27[01m\27[Kinclude/dagman/datum.h:48:59:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[K‘\27[01m\27[Kstruct dm_task\27[m\27[K’ declared inside parameter list will not be visible outside of this definition or declaration\
+ void dm_datum_add_pending(struct dm_datum * datum, struct \27[01;35m\27[Kdm_task\27[m\27[K * task);\
+                                                           \27[01;35m\27[K^~~~~~~\27[m\27[K\
+\27[01m\27[Ksrc/dagman/task.c:\27[m\27[K In function ‘\27[01m\27[Kdm_task_init\27[m\27[K’:\
+\27[01m\27[Ksrc/dagman/task.c:13:18:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kassignment discards ‘\27[01m\27[Kconst\27[m\27[K’ qualifier from pointer target type [\27[01;35m\27[K-Wdiscarded-qualifiers\27[m\27[K]\
+     task->symbol \27[01;35m\27[K=\27[m\27[K va_arg(args, const char*);\
+                  \27[01;35m\27[K^\27[m\27[K\
+\27[01m\27[Ksrc/dagman/task.c:\27[m\27[K In function ‘\27[01m\27[Kdm_task_run\27[m\27[K’:\
+\27[01m\27[Ksrc/dagman/task.c:61:45:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kpassing argument 1 of ‘\27[01m\27[Kabsys_dm_datum_vec_size\27[m\27[K’ from incompatible pointer type [\27[01;35m\27[K-Wincompatible-pointer-types\27[m\27[K]\
+  for(int i = 0; i < absys_dm_datum_vec_size(\27[01;35m\27[K&task->params\27[m\27[K); i++) {\
+                                             \27[01;35m\27[K^~~~~~~~~~~~~\27[m\27[K\
+In file included from \27[01m\27[Kinclude/dagman/task.h:7\27[m\27[K,\
+                 from \27[01m\27[Ksrc/dagman/task.c:1\27[m\27[K:\
+\27[01m\27[Kinclude/dagman/datum.h:44:114:\27[m\27[K \27[01;36m\27[Knote: \27[m\27[Kexpected ‘\27[01m\27[Kstruct absys_dm_datum_vec *\27[m\27[K’ but argument is of type ‘\27[01m\27[Kstruct absys_dm_param_vec *\27[m\27[K’\
+ absys_vec_decl(struct dm_datum, dm_datum);\
+                                                                                                                  \27[01;36m\27[K^\27[m\27[K  \
+"
+}

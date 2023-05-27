@@ -10,8 +10,8 @@ struct absys_str {
     int cap;
 };
 
-ABSYS_API void absys_str_new(struct absys_str* str);
-ABSYS_API void absys_str_del(struct absys_str* str);
+ABSYS_API void absys_str_init(struct absys_str* str);
+ABSYS_API void absys_str_exit(struct absys_str* str);
 ABSYS_API void absys_str_printf(struct absys_str* str, const char* fmt, ...);
 ABSYS_API void absys_str_catf(struct absys_str* str, const char* fmt, ...);
 ABSYS_API void absys_str_cat(struct absys_str* str, const char* src);

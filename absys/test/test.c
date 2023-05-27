@@ -37,9 +37,9 @@ ABSYS_API void test_init () {
     test_root->parent = test_root;
     test_root->name = ABSYS_TEST_ROOT;
     strcpy(test_root->complete_name, "\0");
-    absys_vec_new(&test_root->test_suites, sizeof(struct absys_test_suite));
-    absys_vec_new(&test_root->test_cases, sizeof(struct absys_test_case));
-    absys_str_new(&_absys_test_buffer);
+    absys_vec_init(&test_root->test_suites, sizeof(struct absys_test_suite));
+    absys_vec_init(&test_root->test_cases, sizeof(struct absys_test_case));
+    absys_str_init(&_absys_test_buffer);
 }
 
 ABSYS_API struct absys_test_suite * test_suite(struct absys_test_suite * suite, char * name) {
@@ -53,8 +53,8 @@ ABSYS_API struct absys_test_suite * test_suite(struct absys_test_suite * suite, 
     new_suite.parent = parent_suite;
     new_suite.name = name;
     strcpy(new_suite.complete_name, "\0");
-    absys_vec_new(&new_suite.test_suites, sizeof(struct absys_test_suite));
-    absys_vec_new(&new_suite.test_cases, sizeof(struct absys_test_case));
+    absys_vec_init(&new_suite.test_suites, sizeof(struct absys_test_suite));
+    absys_vec_init(&new_suite.test_cases, sizeof(struct absys_test_case));
     absys_vec_push(&parent_suite->test_suites, (void*)&new_suite);
     return (struct absys_test_suite*)absys_vec_last(&parent_suite->test_suites);
 }
@@ -97,7 +97,7 @@ ABSYS_API int test_run(int argc, char * argv[]) {
     }
 
     struct absys_ptr_vec stack;
-    absys_ptr_vec_new(&stack);
+    absys_ptr_vec_init(&stack);
     absys_ptr_vec_push(&stack, (void*) suite);
     
     while(!absys_ptr_vec_empty(&stack)) {
@@ -127,13 +127,13 @@ ABSYS_API int test_run(int argc, char * argv[]) {
             );
         }
     }
-    absys_ptr_vec_del(&stack);
+    absys_ptr_vec_exit(&stack);
 
     t2 = absys_get_wtime();
     double elapsed = t2 - t1;
 
     test_report_results(seed, elapsed);
-    test_suite_del(test_root);
+    test_suite_exit(test_root);
     
     if (number_failed) {
         return 1;
@@ -237,14 +237,14 @@ test_report_results(long seed, double duration) {
 
 ABSYS_API struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name) {
     struct absys_ptr_vec stack;
-    absys_ptr_vec_new(&stack);
+    absys_ptr_vec_init(&stack);
     absys_ptr_vec_push(&stack, (void*) suite);
     
     while(!absys_ptr_vec_empty(&stack)) {
         suite = (struct absys_test_suite*) absys_ptr_vec_pop(&stack);
 
         if (strcmp(suite->name, name) == 0) {
-            absys_ptr_vec_del(&stack);
+            absys_ptr_vec_exit(&stack);
             return suite;
         }
 
@@ -255,14 +255,14 @@ ABSYS_API struct absys_test_suite * test_suite_resolve(struct absys_test_suite *
             );
         }
     }
-    absys_ptr_vec_del(&stack);
+    absys_ptr_vec_exit(&stack);
     return NULL;
 }
 
-ABSYS_API void test_suite_del(struct absys_test_suite * suite) {
+ABSYS_API void test_suite_exit(struct absys_test_suite * suite) {
    for(int i = 0; i < absys_vec_size(&suite->test_suites); ++ i) {
-        test_suite_del((struct absys_test_suite*) absys_vec_get(&suite->test_suites, i));
+        test_suite_exit((struct absys_test_suite*) absys_vec_get(&suite->test_suites, i));
    }
-   absys_vec_del(&suite->test_suites);
-   absys_vec_del(&suite->test_cases);
+   absys_vec_exit(&suite->test_suites);
+   absys_vec_exit(&suite->test_cases);
 }

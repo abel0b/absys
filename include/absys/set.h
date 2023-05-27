@@ -12,8 +12,8 @@ struct absys_cstr_set {
     int size;
 };
 
-ABSYS_API void absys_cstr_set_new(struct absys_cstr_set* set);
-ABSYS_API void absys_cstr_set_del(struct absys_cstr_set* set);
+ABSYS_API void absys_cstr_set_init(struct absys_cstr_set* set);
+ABSYS_API void absys_cstr_set_exit(struct absys_cstr_set* set);
 ABSYS_API bool absys_cstr_set_empty(struct absys_cstr_set* set);
 ABSYS_API void absys_cstr_set_add(struct absys_cstr_set* set, char* cstr);
 
@@ -24,9 +24,9 @@ struct absys_cstr_set_it {
 	struct absys_str* cur;
 };
 
-ABSYS_API void absys_cstr_set_it_new(struct absys_cstr_set_it* iter, struct absys_cstr_set* set);
+ABSYS_API void absys_cstr_set_it_init(struct absys_cstr_set_it* iter, struct absys_cstr_set* set);
 
-ABSYS_API void absys_cstr_set_it_del(struct absys_cstr_set_it* iter);
+ABSYS_API void absys_cstr_set_it_exit(struct absys_cstr_set_it* iter);
 
 ABSYS_API char* absys_cstr_set_it_get(struct absys_cstr_set_it* iter);
 

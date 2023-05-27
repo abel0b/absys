@@ -23,9 +23,9 @@ struct absys_hook_store {
 	struct absys_trie hook_trie;
 };
 
-void absys_hook_store_new(struct absys_hook_store* hooks);
+void absys_hook_store_init(struct absys_hook_store* hooks);
 
-void absys_hook_store_del(struct absys_hook_store* hooks);
+void absys_hook_store_exit(struct absys_hook_store* hooks);
 
 struct absys_hook* absys_hook_subscribe(struct absys_hook_store* hooks, const char* chan, absys_hook_cb callback);
 

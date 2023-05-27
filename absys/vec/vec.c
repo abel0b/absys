@@ -5,14 +5,14 @@
 
 // TODO: shrink vec allocated memory when removing elements
 
-ABSYS_API void absys_vec_new(struct absys_vec* vec, size_t elem_size) {
+ABSYS_API void absys_vec_init(struct absys_vec* vec, size_t elem_size) {
     vec->capacity = 0;
     vec->size = 0;
     vec->data = NULL;
     vec->elem_size = elem_size;
 }
 
-ABSYS_API void absys_vec_del(struct absys_vec* vec) {
+ABSYS_API void absys_vec_exit(struct absys_vec* vec) {
     if (vec->data) {
         absys_free(vec->data);
     }

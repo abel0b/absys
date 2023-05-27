@@ -142,6 +142,6 @@ ABSYS_API void test_report_results(long seed, double duration);
 
 ABSYS_API struct absys_test_suite * test_suite_resolve(struct absys_test_suite * suite, char * name);
 
-ABSYS_API void test_suite_del(struct absys_test_suite * suite);
+ABSYS_API void test_suite_exit(struct absys_test_suite * suite);
 
 #endif

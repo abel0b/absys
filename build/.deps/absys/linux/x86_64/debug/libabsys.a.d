@@ -1,0 +1,32 @@
+{
+    files = {
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/list/list.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/bits/swap.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/buf/buf.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/console/log.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/dict/common_dict.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/dict/dict.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/fs/filebuf.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/fs/fs.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/mem/mem.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/mem/objpool.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/para/nproc.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/path/path.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/queue/queue.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/set/set.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/str/str.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/str/strstack.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/subproc/proc.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/test/test.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/time/time.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/trie/trie.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/uid/uid.c.o",
+        "extern/absys/build/.objs/absys/linux/x86_64/debug/extern/absys/absys/vec/vec.c.o"
+    },
+    values = {
+        "/usr/bin/ar",
+        {
+            "-cr"
+        }
+    }
+}

@@ -24,8 +24,8 @@ struct absys_dict {
 
 extern void* absys_dict_notfound;
 
-ABSYS_API void absys_dict_new(struct absys_dict* dict);
-ABSYS_API void absys_dict_del(struct absys_dict* dict);
+ABSYS_API void absys_dict_init(struct absys_dict* dict);
+ABSYS_API void absys_dict_exit(struct absys_dict* dict);
 ABSYS_API unsigned long absys_dict_hash(const char *str);
 ABSYS_API void absys_dict_set(struct absys_dict* dict, const char* key, void* value);
 ABSYS_API void* absys_dict_get(struct absys_dict* dict, const char* key);
@@ -44,8 +44,8 @@ struct absys_##NAME##_dict {\
     int* sizes;\
     int* capacities;\
 };\
-ABSYS_API void absys_##NAME##_dict_new(struct absys_##NAME##_dict* dict);\
-ABSYS_API void absys_##NAME##_dict_del(struct absys_##NAME##_dict* dict);\
+ABSYS_API void absys_##NAME##_dict_init(struct absys_##NAME##_dict* dict);\
+ABSYS_API void absys_##NAME##_dict_exit(struct absys_##NAME##_dict* dict);\
 ABSYS_API void absys_##NAME##_dict_set(struct absys_##NAME##_dict* dict, const char* key, TYPE value);\
 ABSYS_API TYPE absys_##NAME##_dict_get(struct absys_##NAME##_dict* dict, const char* key);\
 ABSYS_API TYPE * absys_##NAME##_dict_get_ref(struct absys_##NAME##_dict* dict, const char* key);\
@@ -53,14 +53,14 @@ ABSYS_API bool absys_##NAME##_dict_has(struct absys_##NAME##_dict* dict, const c
 
 
 #define absys_dict_impl(TYPE, NAME) \
-ABSYS_API void absys_##NAME##_dict_new(struct absys_##NAME##_dict* dict) {\
+ABSYS_API void absys_##NAME##_dict_init(struct absys_##NAME##_dict* dict) {\
     dict->numbuckets = ABSYS_NUMBUCKETS;\
     dict->sizes = absys_malloc(sizeof(dict->sizes[0]) * dict->numbuckets);\
     memset(dict->sizes, 0, sizeof(dict->sizes[0]) * dict->numbuckets);\
     dict->capacities = absys_malloc(sizeof(dict->capacities[0]) * dict->numbuckets);\
     memset(dict->capacities, 0, sizeof(dict->capacities[0]) * dict->numbuckets);\
     dict->buckets = NULL;\
-    absys_str_stack_new(&dict->key_pool);\
+    absys_str_stack_init(&dict->key_pool);\
 }\
 ABSYS_API void absys_##NAME##_dict_set(struct absys_##NAME##_dict* dict, const char* key, TYPE value) {\
     unsigned long bucketid = absys_dict_hash(key) % dict->numbuckets;\
@@ -113,13 +113,13 @@ ABSYS_API bool absys_##NAME##_dict_has(struct absys_##NAME##_dict* dict, const c
     }\
     return false;\
 }\
-ABSYS_API void absys_##NAME##_dict_del(struct absys_##NAME##_dict* dict) {\
+ABSYS_API void absys_##NAME##_dict_exit(struct absys_##NAME##_dict* dict) {\
     for(int i = 0; i < dict->numbuckets; ++ i) {\
         if (dict->capacities[i]) {\
             absys_free(dict->buckets[i]);\
         }\
     }\
-    absys_str_stack_del(&dict->key_pool);\
+    absys_str_stack_exit(&dict->key_pool);\
     absys_free(dict->buckets);\
     absys_free(dict->sizes);\
     absys_free(dict->capacities);\

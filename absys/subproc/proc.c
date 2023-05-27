@@ -42,7 +42,7 @@ ABSYS_API int absys_spawn(char* prog, char* args[], FILE* logfile) {
     int exitstatus = 1;
 #if WINDOWS
     struct absys_str command;
-    absys_str_new(&command);
+    absys_str_init(&command);
 
     absys_str_catf(&command, "start /b /w ");
     int cur = 0;
@@ -57,7 +57,7 @@ ABSYS_API int absys_spawn(char* prog, char* args[], FILE* logfile) {
     }
 
     FILE* vpipe = _popen(command.data, "r");
-    absys_str_del(&command);
+    absys_str_exit(&command);
 
     if (vpipe == NULL) {
         absys_elog("could not create subprocess");

@@ -1,0 +1,12 @@
+{
+    errdata = "\27[01m\27[Ksrc/dagman/pthread_worker.c:\27[m\27[K In function ‘\27[01m\27[Kdm_worker_init\27[m\27[K’:\
+\27[01m\27[Ksrc/dagman/pthread_worker.c:49:49:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kpassing argument 3 of ‘\27[01m\27[Kpthread_create\27[m\27[K’ from incompatible pointer type [\27[01;35m\27[K-Wincompatible-pointer-types\27[m\27[K]\
+  int err = pthread_create(&worker->thread, NULL,\27[01;35m\27[K dm_worker_ru\27[m\27[Kn, (void*)&worker->ctx);\
+                                                 \27[01;35m\27[K^~~~~~~~~~~~~\27[m\27[K\
+In file included from \27[01m\27[Kinclude/dagman/worker.h:4\27[m\27[K,\
+                 from \27[01m\27[Ksrc/dagman/pthread_worker.c:1\27[m\27[K:\
+\27[01m\27[K/usr/include/pthread.h:236:15:\27[m\27[K \27[01;36m\27[Knote: \27[m\27[Kexpected ‘\27[01m\27[Kvoid * (*)(void *)\27[m\27[K’ but argument is of type ‘\27[01m\27[Kvoid (*)(void *)\27[m\27[K’\
+       \27[01;36m\27[Kvoid *(*__start_routine) (void *)\27[m\27[K,\
+       \27[01;36m\27[K~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~\27[m\27[K\
+"
+}

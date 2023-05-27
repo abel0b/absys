@@ -4,7 +4,7 @@
 test test_trie(void) {
 	struct absys_trie mytrie;
 
-	absys_trie_new(&mytrie);
+	absys_trie_init(&mytrie);
 
 	assert_int_equal(0, absys_trie_size(&mytrie));
 	absys_trie_set(&mytrie, "foo", (void*)0x42);
@@ -45,7 +45,7 @@ test test_trie(void) {
 	void* value;	
 
 	
-	absys_trie_it_new(&iter, &mytrie);
+	absys_trie_it_init(&iter, &mytrie);
 	
 	assert_int_equal(1, absys_trie_it_next(&iter));
 	absys_trie_it_get(&iter, &key, &value);
@@ -69,10 +69,10 @@ test test_trie(void) {
 	
 	assert_int_equal(0, absys_trie_it_next(&iter));
 
-	absys_trie_it_del(&iter);
+	absys_trie_it_exit(&iter);
 
 
-	absys_trie_it_new(&iter, &mytrie);
+	absys_trie_it_init(&iter, &mytrie);
 	
 	assert_true(absys_trie_it_next_prefix(&iter, ""));
 	absys_trie_it_get(&iter, &key, &value);
@@ -96,10 +96,10 @@ test test_trie(void) {
 	
 	assert_int_equal(0, absys_trie_it_next(&iter));
 
-	absys_trie_it_del(&iter);
+	absys_trie_it_exit(&iter);
 
 
-	absys_trie_it_new(&iter, &mytrie);
+	absys_trie_it_init(&iter, &mytrie);
 	assert_true(absys_trie_it_next_prefix(&iter, "fogo"));
 	
 	absys_trie_it_get(&iter, &key, &value);
@@ -107,10 +107,10 @@ test test_trie(void) {
 
 	assert_int_equal(0, absys_trie_it_next(&iter));
 
-	absys_trie_it_del(&iter);
+	absys_trie_it_exit(&iter);
 	
 
-	absys_trie_it_new(&iter, &mytrie);
+	absys_trie_it_init(&iter, &mytrie);
 	assert_true(absys_trie_it_next_prefix(&iter, "foo"));
 	
 	absys_trie_it_get(&iter, &key, &value);
@@ -122,10 +122,10 @@ test test_trie(void) {
 
 	assert_int_equal(0, absys_trie_it_next(&iter));
 
-	absys_trie_it_del(&iter);
+	absys_trie_it_exit(&iter);
 
 	
-	absys_trie_del(&mytrie);
+	absys_trie_exit(&mytrie);
 
 	return pass();
 }

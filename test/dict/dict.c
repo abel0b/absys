@@ -3,7 +3,7 @@
 
 test test_dict(void) {
     struct absys_dict mydict;
-    absys_dict_new(&mydict);
+    absys_dict_init(&mydict);
     for(int i = 0; i < mydict.numbuckets; ++i) {
     	assert_int_zero(mydict.sizes[i]);
     }
@@ -23,7 +23,7 @@ test test_dict(void) {
 
     assert_ptr_equal(&b, absys_dict_get(&mydict, "foo"));
 
-    absys_dict_del(&mydict);
+    absys_dict_exit(&mydict);
 
     return pass();
 }

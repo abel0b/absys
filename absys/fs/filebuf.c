@@ -1,16 +1,16 @@
 #include "absys/filebuf.h"
 #include "absys/utils.h"
 
-ABSYS_API void absys_filebuf_new(struct absys_filebuf* filebuf, char* filepath, size_t flush_size) {
-	absys_buf_new(&filebuf->buf);
+ABSYS_API void absys_filebuf_init(struct absys_filebuf* filebuf, char* filepath, size_t flush_size) {
+	absys_buf_init(&filebuf->buf);
 	filebuf->flush_size = flush_size;
 	filebuf->file_buf = fopen(filepath, "wb");
 	absys_assert(filebuf->file_buf);
 }
 
-ABSYS_API void absys_filebuf_del(struct absys_filebuf* filebuf) {
+ABSYS_API void absys_filebuf_exit(struct absys_filebuf* filebuf) {
 	absys_filebuf_flush(filebuf);
-	absys_buf_del(&filebuf->buf);
+	absys_buf_exit(&filebuf->buf);
 	int rc = fclose(filebuf->file_buf);
 	absys_assert(rc == 0);
 }

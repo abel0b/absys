@@ -19,9 +19,9 @@ struct absys_plugin_store {
 	struct absys_hook_store* hooks;
 };
 
-void absys_plugin_store_new(struct absys_plugin_store* plugins);
+void absys_plugin_store_init(struct absys_plugin_store* plugins);
 
-void absys_plugin_store_del(struct absys_plugin_store* plugin);
+void absys_plugin_store_exit(struct absys_plugin_store* plugin);
 
 struct absys_plugin* absys_plugin_register(struct absys_plugin_store* plugins, char* name, int (*plugin_init)(struct absys_plugin*, struct absys_hook_store*), void (*plugin_destroy)(struct absys_plugin*));
 

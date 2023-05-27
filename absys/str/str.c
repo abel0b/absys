@@ -8,7 +8,7 @@
 
 absys_vec_impl(struct absys_str, str)
 
-ABSYS_API void absys_str_new(struct absys_str* str) {
+ABSYS_API void absys_str_init(struct absys_str* str) {
     str->len = 0;
     str->cap = 8;
     str->data = absys_malloc(sizeof(str->data[0]) * str->cap);
@@ -74,7 +74,7 @@ ABSYS_API void absys_str_flush(struct absys_str* str) {
     str->data[0] = '\0';
 }
 
-ABSYS_API void absys_str_del(struct absys_str* str) {
+ABSYS_API void absys_str_exit(struct absys_str* str) {
     if (str->data) {
         absys_free(str->data);
     }

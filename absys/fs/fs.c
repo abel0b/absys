@@ -43,7 +43,7 @@ ABSYS_API void absys_fs_read2str(char* path, struct absys_str* dest) {
     long int filesize = ftell(file);
     fseek(file, 0, SEEK_SET);
 
-    absys_str_new(dest);
+    absys_str_init(dest);
 
     if (filesize) {
         absys_str_resize(dest, filesize);

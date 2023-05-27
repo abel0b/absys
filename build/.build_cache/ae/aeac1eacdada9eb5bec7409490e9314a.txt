@@ -1,0 +1,20 @@
+{
+    errdata = "\27[01m\27[Ksrc/dagman/rt.c:\27[m\27[K In function ‘\27[01m\27[Kdm_init\27[m\27[K’:\
+\27[01m\27[Ksrc/dagman/rt.c:9:2:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kimplicit declaration of function ‘\27[01m\27[Kdm_hw_init\27[m\27[K’; did you mean ‘\27[01m\27[Kdm_init\27[m\27[K’? [\27[01;35m\27[K-Wimplicit-function-declaration\27[m\27[K]\
+  \27[01;35m\27[Kdm_hw_init\27[m\27[K(&rt->hw);\
+  \27[01;35m\27[K^~~~~~~~~~\27[m\27[K\
+  \27[32m\27[Kdm_init\27[m\27[K\
+\27[01m\27[Ksrc/dagman/rt.c:11:43:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kimplicit declaration of function ‘\27[01m\27[Kabsys_nproc\27[m\27[K’; did you mean ‘\27[01m\27[Kabsys_vec_pop\27[m\27[K’? [\27[01;35m\27[K-Wimplicit-function-declaration\27[m\27[K]\
+  absys_dm_worker_vec_resize(&rt->workers, \27[01;35m\27[Kabsys_nproc\27[m\27[K());\
+                                           \27[01;35m\27[K^~~~~~~~~~~\27[m\27[K\
+                                           \27[32m\27[Kabsys_vec_pop\27[m\27[K\
+\27[01m\27[Ksrc/dagman/rt.c:\27[m\27[K In function ‘\27[01m\27[Kdm_exit\27[m\27[K’:\
+\27[01m\27[Ksrc/dagman/rt.c:46:2:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kimplicit declaration of function ‘\27[01m\27[Kdm_barrier\27[m\27[K’ [\27[01;35m\27[K-Wimplicit-function-declaration\27[m\27[K]\
+  \27[01;35m\27[Kdm_barrier\27[m\27[K(rt);\
+  \27[01;35m\27[K^~~~~~~~~~\27[m\27[K\
+\27[01m\27[Ksrc/dagman/rt.c:50:2:\27[m\27[K \27[01;35m\27[Kwarning: \27[m\27[Kimplicit declaration of function ‘\27[01m\27[Kdm_hw_exit\27[m\27[K’; did you mean ‘\27[01m\27[Kdm_exit\27[m\27[K’? [\27[01;35m\27[K-Wimplicit-function-declaration\27[m\27[K]\
+  \27[01;35m\27[Kdm_hw_exit\27[m\27[K(&rt->hw);\
+  \27[01;35m\27[K^~~~~~~~~~\27[m\27[K\
+  \27[32m\27[Kdm_exit\27[m\27[K\
+"
+}

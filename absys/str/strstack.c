@@ -5,9 +5,9 @@
 #include <stdarg.h>
 #include "absys/utils.h"
 
-ABSYS_API void absys_str_stack_new(struct absys_str_stack* str_stack) {
-    absys_objpool_new(&str_stack->objpool, sizeof(char), NULL);
-    absys_cstr_vec_new(&str_stack->stack);
+ABSYS_API void absys_str_stack_init(struct absys_str_stack* str_stack) {
+    absys_objpool_init(&str_stack->objpool, sizeof(char), NULL);
+    absys_cstr_vec_init(&str_stack->stack);
 }
 
 ABSYS_API char* absys_str_stack_pushf(struct absys_str_stack* str_stack, const char * fmt, ...) {
@@ -51,7 +51,7 @@ ABSYS_API char* absys_str_stack_peek(struct absys_str_stack* str_stack) {
     return str;
 }
 
-ABSYS_API void absys_str_stack_del(struct absys_str_stack* str_stack) {
-    absys_objpool_del(&str_stack->objpool);
-    absys_cstr_vec_del(&str_stack->stack);
+ABSYS_API void absys_str_stack_exit(struct absys_str_stack* str_stack) {
+    absys_objpool_exit(&str_stack->objpool);
+    absys_cstr_vec_exit(&str_stack->stack);
 }
