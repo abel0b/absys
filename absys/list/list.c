@@ -18,6 +18,12 @@ ABSYS_API void absys_list_init(struct absys_list* list, size_t elem_size) {
 }
 
 ABSYS_API void absys_list_exit(struct absys_list* list) {
+	struct absys_list_node* node = list->head;
+	do {
+		struct absys_list_node* next = node->next;
+		absys_free(node->data);
+		node = next;
+	} while(node != list->head);
 	absys_objpool_exit(&list->node_pool);
 }
 

@@ -5,7 +5,7 @@
 
 static size_t mem = 0;
 static size_t mempeak = 0;
-static size_t memlimit = 1000000000;
+static size_t memlimit = 128e9;
 
 static int size_max(size_t a, size_t b) {
     return (a >= b)? a : b;
@@ -36,7 +36,7 @@ ABSYS_API void* absys_malloc_aux(size_t size) {
 #endif
     mem = checklimit(mem+size);
     mempeak = size_max(mempeak, mem);
-    void* data = absys_malloc(size);
+    void* data = malloc(size);
     checkptr(data, size);
     return data;
 }
