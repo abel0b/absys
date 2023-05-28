@@ -1,5 +1,5 @@
-#include "absys/objpool.h"
 #include "absys/mem.h"
+#include "absys/objpool.h"
 #include "absys/utils.h"
 
 static void absys_objpool_chunk_init(struct absys_objpool_chunk* chunk) {
@@ -50,6 +50,10 @@ ABSYS_API void* absys_objpool_alloc(struct absys_objpool* objpool) {
     void* obj = (void*) (objpool->chunks[chunk].data + objpool->chunks[chunk].cursor);
     objpool->chunks[chunk].cursor += objpool->elem_size;
     return obj;
+}
+
+ABSYS_API void absys_objpool_free(struct absys_objpool* objpool, void * obj) {
+
 }
 
 ABSYS_API void* absys_objpool_arralloc(struct absys_objpool* objpool, int count) {

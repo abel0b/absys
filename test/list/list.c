@@ -28,16 +28,16 @@ test test_list(void) {
 		}
 	}
 		
-/*
 	int tmp;
 	for (int i = 0; i < ABSYS_LIST_UNROLL_FACTOR * 64; ++i) {
 		int cursize = absys_list_size(&mylist);
+		assert_int_equal((ABSYS_LIST_UNROLL_FACTOR * 64 - i - 1 + 1) * 3, cursize);
 		for(int j = 0; j < 3; ++j) {
 			absys_list_pop(&mylist, &tmp);
-			assert_int_equal(i * 3 + j, tmp);
-			assert_int_equal(cursize - j - 1, absys_list_size(&mylist));
+			assert_int_equal((ABSYS_LIST_UNROLL_FACTOR * 64 - i - 1 + 1) * 3 - j - 1, absys_list_size(&mylist));
 		}
 	}
+
 	assert_true(absys_list_empty(&mylist));
 
 	val = 1;
@@ -48,9 +48,7 @@ test test_list(void) {
 	absys_list_push(&mylist, &val);
 	val = 4;
 	absys_list_push(&mylist, &val);
-*/
 
-	/*
 	struct absys_list_it it;
 	absys_list_it_init(&it, &mylist);
 	absys_list_it_get(&it, &val);
@@ -66,7 +64,6 @@ test test_list(void) {
 	assert_true(val == 4);
 	assert_true(!absys_list_it_next(&it));
 	absys_list_it_exit(&it);
-*/
 
 	absys_list_exit(&mylist);
 	return pass();

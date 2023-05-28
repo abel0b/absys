@@ -36,6 +36,9 @@ ABSYS_API void* absys_list_tail(struct absys_list* list);
 ABSYS_API void absys_list_insert(struct absys_list* list, int idx, void* elem);
 ABSYS_API void absys_list_push(struct absys_list* list, void* elem);
 ABSYS_API void absys_list_pop(struct absys_list* list, void* elem);
+
+ABSYS_API void absys_int_list_show(struct absys_list* list);
+
 ABSYS_API void absys_list_it_init(struct absys_list_it* iter, struct absys_list* list);
 ABSYS_API void absys_list_it_exit(struct absys_list_it* iter);
 ABSYS_API void absys_list_it_get(struct absys_list_it* iter, void* value);

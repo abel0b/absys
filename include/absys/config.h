@@ -8,5 +8,8 @@
 #define ABSYS_LIST_UNROLL_FACTOR 8
 #endif
 
+#ifndef ABSYS_QUEUE_UNROLL_FACTOR
+#define ABSYS_QUEUE_UNROLL_FACTOR 8
+#endif
 
 #endif

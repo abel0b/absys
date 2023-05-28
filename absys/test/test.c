@@ -33,7 +33,7 @@ ABSYS_API struct absys_test_result todo () {
 }
 
 ABSYS_API void test_init () {
-    test_root = malloc (sizeof (struct absys_test_suite));
+    test_root = absys_malloc (sizeof (struct absys_test_suite));
     test_root->parent = test_root;
     test_root->name = ABSYS_TEST_ROOT;
     strcpy(test_root->complete_name, "\0");

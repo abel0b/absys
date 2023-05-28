@@ -22,6 +22,7 @@ struct absys_objpool {
 ABSYS_API void absys_objpool_init(struct absys_objpool* objpool, size_t elem_size, void del(void*));
 ABSYS_API void absys_objpool_exit(struct absys_objpool* objpool);
 ABSYS_API void* absys_objpool_alloc(struct absys_objpool* objpool);
+ABSYS_API void absys_objpool_free(struct absys_objpool* objpool, void * obj);
 ABSYS_API void* absys_objpool_arralloc(struct absys_objpool* objpool, int n);
 ABSYS_API void absys_objpool_pop(struct absys_objpool* objpool, int size);
 

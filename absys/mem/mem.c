@@ -36,7 +36,7 @@ ABSYS_API void* absys_malloc_aux(size_t size) {
 #endif
     mem = checklimit(mem+size);
     mempeak = size_max(mempeak, mem);
-    void* data = malloc(size);
+    void* data = absys_malloc(size);
     checkptr(data, size);
     return data;
 }

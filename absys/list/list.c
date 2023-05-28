@@ -1,10 +1,11 @@
 #include "absys/list.h"
+#include <assert.h>
 
 static void absys_list_node_init(struct absys_list_node* node, int elem_size) {
 	node->size = 0;
 	node->prev = node;
 	node->next = node;
-	node->data = malloc(elem_size * ABSYS_LIST_UNROLL_FACTOR);
+	node->data = absys_malloc(elem_size * ABSYS_LIST_UNROLL_FACTOR);
 }
 
 ABSYS_API void absys_list_init(struct absys_list* list, size_t elem_size) {
@@ -32,7 +33,6 @@ ABSYS_API void* absys_list_get(struct absys_list* list, int idx) {
 	int ii = 0;
 	struct absys_list_node* node = list->head;
 	while(ii + node->size < idx) {
-		// TODO: if (node == NULL) out_of_bound
 		ii += node->size;
 		node = node->next;
 	}
@@ -50,15 +50,20 @@ ABSYS_API void* absys_list_tail(struct absys_list* list) {
 void _absys_list_add(struct absys_list* list, struct absys_list_node* node, int offset, void * value) {
 	if (node->size == ABSYS_LIST_UNROLL_FACTOR) {
 		struct absys_list_node * new_node = (struct absys_list_node*) absys_objpool_alloc(&list->node_pool);
-		new_node->size = 0;
+		absys_list_node_init(new_node, list->elem_size);
 		new_node->prev = node;
 		new_node->next = node->next;
 		node->next = new_node;
 		new_node->next->prev = new_node;
+
+		if (list->tail == node) {
+			list->tail = new_node;
+		}
 	
-		if (offset == ABSYS_LIST_UNROLL_FACTOR - 1) {
+		if (offset == ABSYS_LIST_UNROLL_FACTOR) {
 			memcpy(new_node->data, value, list->elem_size);
 			new_node->size = 1;
+			list->size++;
 			return;
 		}
 	}
@@ -67,23 +72,36 @@ void _absys_list_add(struct absys_list* list, struct absys_list_node* node, int 
 	if (offset < node->size) {
 		memmove(value_store + list->elem_size, value_store, list->elem_size * (node->size - offset));
 	}
-	else {
-		list->size++;
-	}
+	list->size++;
 	memcpy(value_store, value, list->elem_size);
 	++ node->size;
 }
 
 void _absys_list_rem(struct absys_list* list, struct absys_list_node* node, int offset) {
-	node->prev->next = node->next;
-	node->next->prev = node->prev;
-	// TODO: objpool dealloc
 	void* value_store = node->data + list->elem_size * offset;
-	if (offset < node->size) {
+	if (offset < node->size - 1) {
 		memmove(value_store, value_store + list->elem_size, list->elem_size * (node->size - offset));
 	}
 	-- list->size;
 	-- node->size;
+
+	if (node->size == 0) {
+		if (node == list->head && list->size != 0) {
+			list->head = node->next;
+			node->next->prev = list->tail;
+			list->tail->next = list->head;
+		}
+		else if (node == list->tail) {
+			list->tail = node->prev;
+			node->prev->next = list->head;
+			list->head->prev = list->tail;
+		}
+		else {
+			node->prev->next = node->next;
+			node->next->prev = node->prev;
+		}
+		absys_objpool_free(&list->node_pool, node);
+	}
 }
 
 ABSYS_API void absys_list_insert(struct absys_list* list, int idx, void* value) {
@@ -94,6 +112,26 @@ ABSYS_API void absys_list_insert(struct absys_list* list, int idx, void* value) 
 		node = node->next;
 	}
 	_absys_list_add(list, node, idx - ii, value);
+}
+
+ABSYS_API void absys_int_list_show(struct absys_list* list) {
+	int ii = 0;
+	struct absys_list_node* node = list->head;
+	printf("list");
+	while(ii < list->size) {
+		printf(" -> [");
+		for (int jj = 0; jj < node->size; ++jj) {
+			printf("%d", *(int*)(node->data + jj * list->elem_size));
+			if (jj != node->size - 1) {
+				printf(" ");
+			}
+		}
+		printf("]");
+
+		ii += node->size;
+		node = node->next;
+	}
+	printf("\n");
 }
 
 ABSYS_API void absys_list_remove(struct absys_list* list, int idx) {

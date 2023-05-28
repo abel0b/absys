@@ -3,6 +3,9 @@ option("absys_enable_test")
 	set_showmenu(true)
 	set_description("Enable absys test target")
 
+option("absys_enable_asan")
+	add_cflags("-fsanitize=address")
+
 target("absys")
 	if is_mode("debug") then
 		set_symbols("debug")
@@ -11,6 +14,7 @@ target("absys")
 		set_symbols("hidden")
 		set_optimize("fastest")
 	end
+	set_options("asan")
 
 	if is_plat("windows") then
 		add_defines("LINUX=1")
@@ -43,6 +47,14 @@ target("absys")
 
 if has_config("absys_enable_test") then
 	target("absys_test")
+		if is_mode("debug") then
+			set_symbols("debug")
+			set_optimize("none")
+		else
+			set_symbols("hidden")
+			set_optimize("fastest")
+		end
+		set_options("asan")
 		add_deps("absys")
 		add_includedirs("include")
 		set_kind("binary")

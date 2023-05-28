@@ -8,6 +8,7 @@
 #include "trie/trie.h"
 #include "vec/vec.h"
 #include "list/list.h"
+#include "queue/queue.h"
 
 int main(int argc, char * argv[]) {
 	suite bits = test_suite(NULL, "bits");
@@ -28,5 +29,7 @@ int main(int argc, char * argv[]) {
 	test_case(vec, "vec", test_vec);
 	suite list = test_suite(NULL, "list");
 	test_case(list, "list", test_list);
+	suite queue = test_suite(NULL, "queue");
+	test_case(queue, "queue", test_queue);
 	return test_run(argc, argv);
 }
