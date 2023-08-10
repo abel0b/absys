@@ -73,6 +73,12 @@ ABSYS_API void absys_##NAME##_queue_init(struct absys_##NAME##_queue* queue) {\
 }\
 \
 ABSYS_API void absys_##NAME##_queue_exit(struct absys_##NAME##_queue* queue) {\
+	struct absys_##NAME##_queue_node* node = queue->head;\
+	do {\
+		struct absys_##NAME##_queue_node* next = node->next;\
+		absys_free(node->data);\
+		node = next;\
+	} while (node != queue->head);\
 	absys_objpool_exit(&queue->node_pool);\
 }\
 \

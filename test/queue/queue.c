@@ -2,6 +2,14 @@
 #include "absys/queue.h"
 #include "queue.h"
 
+struct foo {
+	int a;
+	int b;
+};
+
+absys_queue_decl(struct foo, foo);
+absys_queue_impl(struct foo, foo);
+
 test test_queue(void) {
 	struct absys_queue myqueue;
 	absys_queue_init(&myqueue, sizeof(int));
@@ -38,7 +46,40 @@ test test_queue(void) {
 	}	
 
 	assert_true(absys_queue_empty(&myqueue));
-
 	absys_queue_exit(&myqueue);
+
+	struct absys_foo_queue myfooqueue;
+	absys_foo_queue_init(&myfooqueue);
+
+	struct foo f1 = { 1, 2 };
+	struct foo f2 = { 3, 4 };
+	struct foo f3 = { 5, 6 };
+
+	assert_true(absys_foo_queue_empty(&myfooqueue));
+	absys_foo_queue_enqueue(&myfooqueue, f1);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 1);
+	absys_foo_queue_enqueue(&myfooqueue, f2);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 2);
+	absys_foo_queue_enqueue(&myfooqueue, f3);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 3);
+
+	struct foo f4;
+	f4 = absys_foo_queue_dequeue(&myfooqueue);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 2);
+	assert_int_equal(f4.a, 1);
+	assert_int_equal(f4.b, 2);
+
+	f4 = absys_foo_queue_dequeue(&myfooqueue);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 1);
+	assert_int_equal(f4.a, 3);
+	assert_int_equal(f4.b, 4);
+
+	f4 = absys_foo_queue_dequeue(&myfooqueue);
+	assert_int_equal(absys_foo_queue_size(&myfooqueue), 0);
+	assert_int_equal(f4.a, 5);
+	assert_int_equal(f4.b, 6);
+
+	absys_foo_queue_exit(&myfooqueue);
+
 	return pass();
 }

@@ -65,7 +65,7 @@ void _absys_queue_add(struct absys_queue* queue, struct absys_queue_node* node, 
 void _absys_queue_rem(struct absys_queue* queue, struct absys_queue_node* node, int offset) {
 	void* value_store = node->data + queue->elem_size * offset;
 	if (offset < node->size - 1) {
-		memmove(value_store, value_store + queue->elem_size, queue->elem_size * (node->size - offset));
+		memmove(value_store, value_store + queue->elem_size, queue->elem_size * (node->size - offset - 1));
 	}
 	-- queue->size;
 	-- node->size;
