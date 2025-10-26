@@ -1,5 +1,6 @@
 #include "absys/list.h"
 #include <assert.h>
+#include <string.h>
 
 static void absys_list_node_init(struct absys_list_node* node, int elem_size) {
 	node->size = 0;
@@ -42,7 +43,7 @@ ABSYS_API void* absys_list_get(struct absys_list* list, int idx) {
 		ii += node->size;
 		node = node->next;
 	}
-	return &node->data[(idx - ii) * list->elem_size];
+	return node->data + (idx - ii) * list->elem_size;
 }
 
 ABSYS_API void* absys_list_head(struct absys_list* list) {
@@ -50,7 +51,7 @@ ABSYS_API void* absys_list_head(struct absys_list* list) {
 }
 
 ABSYS_API void* absys_list_tail(struct absys_list* list) {
-	return &list->tail->data[(list->tail->size - 1) * list->elem_size];
+	return &list->tail->data + (list->tail->size - 1) * list->elem_size;
 }
 
 void _absys_list_add(struct absys_list* list, struct absys_list_node* node, int offset, void * value) {

@@ -1,4 +1,5 @@
 #include "absys/queue.h"
+#include <string.h>
 
 static void absys_queue_node_init(struct absys_queue_node* node, int elem_size) {
 	node->size = 0;
