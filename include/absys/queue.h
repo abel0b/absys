@@ -94,7 +94,7 @@ ABSYS_API TYPE* absys_##NAME##_queue_peek(struct absys_##NAME##_queue* queue) {\
 	return &queue->head->data[0];\
 }\
 \
-void _absys_##NAME##_queue_add(struct absys_##NAME##_queue* queue, struct absys_##NAME##_queue_node* node, int offset, TYPE * value) {\
+void _absys_##NAME##_queue_add(struct absys_##NAME##_queue* queue, struct absys_##NAME##_queue_node* node, int offset, QUAL TYPE * value) {\
 	if (node->size == ABSYS_QUEUE_UNROLL_FACTOR) {\
 		struct absys_##NAME##_queue_node * new_node = (struct absys_##NAME##_queue_node*) absys_objpool_alloc(&queue->node_pool);\
 		absys_##NAME##_queue_node_init(new_node);\
